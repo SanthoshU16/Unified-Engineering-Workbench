@@ -4,6 +4,9 @@
 /Launch.exe
 /dist/
 /docs/submission_history.bundle
+# Candidate demo recordings are included directly in the submission ZIP, not in Git history.
+/docs/demo/demo.mp4
+/docs/demo/demo.mov
 
 # Allow VS Code run/build configurations
 !.vscode/

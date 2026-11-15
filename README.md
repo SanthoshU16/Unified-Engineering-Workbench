@@ -41,7 +41,7 @@ To build the Windows runtime on a Windows x64 development machine, install CMake
 
 This build-time toolchain is not required by the extracted application. After the runtime is checked, create the archive with `./scripts/package_submission.sh "<CandidateID>"` from a shell with `zip`, Git, Python 3 / ReportLab 4.5.1, and Poppler `pdfinfo` available.
 
-Before packaging, place the required 3–5 minute recording at `docs/demo/demo.mp4` or a timestamped screenshot walkthrough with logs at `docs/demo/screenshot_walkthrough.md`. Video preflight uses `ffprobe`; the package script checks the recording duration or walkthrough timestamps/logs, Candidate ID, Windows runtime, and six-page report.
+Before packaging, provide the required 3–5 minute recording as `docs/demo/demo.mp4` or `docs/demo/demo.mov`, or provide a timestamped screenshot walkthrough with logs at `docs/demo/screenshot_walkthrough.md`. The package script checks the video track and duration with the standard-library `scripts/probe_movie.py` helper, Candidate ID, Windows runtime, and six-page report. The supplied MOV is 72.875 seconds, so this checkout uses the timestamped screenshot walkthrough and verification log as the alternate evidence.
 
 ### macOS / Linux
 Run the shell launcher:
@@ -62,68 +62,137 @@ When CMake is available, the script reconfigures and incrementally rebuilds the 
 
 ```
 unified-engineering-workbench/
+├── .gitattributes                 # Binary-file handling for PDFs, bundles, and recordings
+├── .gitignore                     # Build/runtime files and temporary artifacts
+├── .vscode/
+│   ├── launch.json                # Packaged and source debugging profiles
+│   └── tasks.json                 # Build and test tasks
 ├── CMakeLists.txt                 # Root CMake configuration (C++17, CTest)
+├── Dockerfile                     # Container build and runtime
+├── Launch.bat                     # Windows source-build fallback
+├── Launch.exe                     # Generated on Windows before submission; absent in this checkout
+├── README.md                      # Setup, architecture, formats, and requirements
 ├── dependencies.lock              # Runtime dependency and toolchain record
-├── Launch.exe                     # Built Windows launcher; generated before submission
-├── Launch.bat                     # Windows one-click launcher
-├── launch.sh                      # macOS/Linux one-click launcher
-├── .vscode/                       # Editor run and debug configurations
-│   ├── launch.json                # F5 debug/run configuration
-│   └── tasks.json                 # Build & test task definitions
-├── src/
-│   ├── backend/                   # Core C++17 application logic
-│   │   ├── include/workbench/
-│   │   │   ├── common/            # Types, Vec3, STL/ANSYS models, JSON serializer
-│   │   │   ├── fea/               # 1D Thermal FEA solver & batch generator
-│   │   │   ├── cad/               # STL & ANSYS CSV parsers
-│   │   │   ├── multicore/         # Bounded C++ thread pool
-│   │   │   ├── embedded/          # MCU, FPGA, and JTAG mock adapters
-│   │   │   ├── ml/                # Analytical backpropagation & finite difference check
-│   │   │   └── server/            # Cross-platform socket HTTP/REST server
-│   │   └── src/                   # C++ implementations
-│   └── frontend/                  # Presentation layer (100% offline, zero npm dependencies)
-│       ├── public/
-│       │   ├── index.html         # Single Page Application
-│       │   └── styles.css         # Midnight plum and ion-orchid engineering workstation theme
-│       └── src/
-│           ├── app.js             # UI coordinator, navigation, and REST transport
-│           ├── renderer3d.js      # Zero-dependency WebGL 3D engine (STL + Point Cloud)
-│           ├── chart_engine.js    # Zero-dependency 2D Canvas charting engine
-│           ├── view_geometry.js   # CAD 3D STL viewer
-│           ├── view_thermal.js    # ANSYS point cloud & 1D FEA solver
-│           ├── view_performance.js # Multicore benchmark runner & scaling charts
-│           └── view_hardware.js   # Embedded block diagram, tables, and device cards
-├── data/                          # Sample datasets with provenance
-│   ├── geometry/                  # STL samples (sample_heatsink.stl, validation fixtures)
-│   └── thermal/                   # Synthetic ANSYS-style nodal CSV (sample and parser error cases)
-├── tests/                         # Positive, negative, and numerical C++ tests
-├── dist/windows-x64/              # Built Windows server runtime; generated before submission
-├── results/                       # Generated evidence, raw CSVs, and labelled plots
-│   ├── fea_convergence.csv        # FEA midpoint error data
-│   ├── benchmark_serial_parallel.csv # 1, 2, 4 worker scaling measurements
-│   ├── backprop_training_loss.csv # 100-step training loss history
-│   └── plots/                     # High-resolution vector SVG plots
-├── docs/                          # Comprehensive technical documentation
-│   ├── REPORT.md                  # Technical report and measured results
-│   ├── REPORT.pdf                 # Six-page submission report
-│   ├── SUBMISSION_AUDIT.md        # Requirement-by-requirement final audit
+├── launch.sh                      # macOS/Linux launcher
+├── render.yaml                    # Cloud deployment configuration
+├── dist/windows-x64/
+│   └── workbench_server.exe       # Generated Windows server; absent in this checkout
+├── data/
+│   ├── geometry/
+│   │   ├── README.md              # Geometry provenance and units
+│   │   ├── malformed_corrupt.stl  # Parser rejection fixture
+│   │   ├── malformed_empty.stl    # Parser rejection fixture
+│   │   └── sample_heatsink.stl    # Self-created sample geometry
+│   └── thermal/
+│       ├── README.md              # Dataset schema and synthetic-data note
+│       ├── ansys_nodal_temperature.csv
+│       ├── malformed_corrupt.csv
+│       └── malformed_empty.csv
+├── docs/
+│   ├── AI_USE_LOG.md              # AI assistance and validation record
+│   ├── APPENDIX_BACKPROP_DERIVATION.md
 │   ├── DEPENDENCIES.md            # Tool and dependency versions
-│   ├── APPENDIX_BACKPROP_DERIVATION.md # Backpropagation derivation
-│   ├── EMBEDDED_SYSTEM_SPEC.md    # Hardware interface & pin-voltage specification
-│   ├── WALKTHROUGH.md             # Walkthrough script and verification log
-│   ├── AI_USE_LOG.md              # AI assistance disclosure & challenge test
-│   └── OWNERSHIP.md               # Statement of original vs reused work
+│   ├── EMBEDDED_SYSTEM_SPEC.md    # Hardware interfaces and voltage assumptions
+│   ├── GIT_LOG.md                 # Development history and archive notes
+│   ├── OWNERSHIP.md               # Original/reused work statement
+│   ├── REPORT.md                  # Technical report source
+│   ├── REPORT.pdf                 # Six-page submission report
+│   ├── SUBMISSION_AUDIT.md        # Requirement-by-requirement status
+│   ├── WALKTHROUGH.md             # Build and verification record
+│   ├── demo/
+│   │   ├── README.md              # Evidence capture instructions
+│   │   ├── demo.mov               # Local user-provided partial; included directly in ZIP, not Git history
+│   │   ├── screenshot_walkthrough.md # Timestamped frame sequence and verification notes
+│   │   ├── verification.log        # Time-stamped local HTTP smoke check
+│   │   └── screenshots/
+│   │       ├── 01_145306_geometry.png
+│   │       ├── 02_145314_wireframe.png
+│   │       ├── 03_145322_geometry_detail.png
+│   │       ├── 04_145330_thermal_fea.png
+│   │       ├── 05_145346_thermal_3d.png
+│   │       ├── 06_145354_performance_setup.png
+│   │       ├── 07_145358_performance_results.png
+│   │       ├── 08_145410_hardware.png
+│   │       └── 09_145418_geometry_end.png
+│   ├── handwritten_evidence/
+│   │   ├── task_f_handwritten_notes_page_1.png
+│   │   └── task_f_handwritten_notes_page_2.png
+│   ├── screenshots/
+│   │   ├── 01_geometry_shaded_surface.jpg
+│   │   ├── 02_geometry_wireframe.jpg
+│   │   ├── 03_thermal_fea_temperature_profile.jpg
+│   │   ├── 04_thermal_3d_rod_visualizer.jpg
+│   │   ├── 05_thermal_3d_ansys_point_cloud.jpg
+│   │   ├── 06_performance_lab_execution_time.jpg
+│   │   ├── 07_performance_lab_speedup_chart.jpg
+│   │   ├── 08_hardware_workbench_block_diagram.jpg
+│   │   └── README.md              # Screenshot index and evidence limits
+│   └── workbench_repo.bundle      # Historical bundle; excluded from the submission ZIP
+├── packaging/windows/launcher.cpp # Native Windows GUI launcher source
+├── results/
+│   ├── backprop_training_loss.csv
+│   ├── benchmark_serial_parallel.csv
+│   ├── fea_convergence.csv
+│   └── plots/
+│       ├── backprop_loss_curve.svg
+│       ├── fea_mesh_convergence.svg
+│       ├── fea_temperature_profile.svg
+│       └── multicore_speedup_efficiency.svg
 ├── scripts/
-    ├── build.sh                   # Build & test automation script
-    ├── build_windows_runtime.ps1  # Windows x64 runtime build and hash report
-    ├── create_sanitized_bundle.py # Anonymized history bundle for the ZIP
-    ├── render_report.py           # Build the six-page PDF report (ReportLab)
-    ├── run_benchmarks.sh          # Headless benchmark & results export
-    └── package_submission.sh      # Submission zip archiver
-└── packaging/
-    └── windows/                   # Native Windows GUI launcher source
-        └── launcher.cpp
+│   ├── build.sh                   # Local build and tests
+│   ├── build_windows_runtime.ps1  # Windows x64 runtime build and hash report
+│   ├── create_sanitized_bundle.py # Anonymized history bundle for the ZIP
+│   ├── package_submission.sh      # Submission ZIP preflight and archiver
+│   ├── probe_movie.py             # MP4/MOV video-track and duration check
+│   ├── render_report.py           # Build the six-page PDF report
+│   └── run_benchmarks.sh          # Headless benchmark and results export
+├── src/
+│   ├── backend/
+│   │   ├── CMakeLists.txt
+│   │   ├── include/workbench/
+│   │   │   ├── cad/
+│   │   │   │   ├── ansys_parser.hpp
+│   │   │   │   └── stl_parser.hpp
+│   │   │   ├── common/
+│   │   │   │   ├── json.hpp
+│   │   │   │   ├── system_info.hpp
+│   │   │   │   └── types.hpp
+│   │   │   ├── embedded/device_adapter.hpp
+│   │   │   ├── fea/
+│   │   │   │   ├── thermal_1d.hpp
+│   │   │   │   └── thermal_batch.hpp
+│   │   │   ├── ml/backprop.hpp
+│   │   │   ├── multicore/thread_pool.hpp
+│   │   │   └── server/http_server.hpp
+│   │   └── src/
+│   │       ├── cad/
+│   │       │   ├── ansys_parser.cpp
+│   │       │   └── stl_parser.cpp
+│   │       ├── common/system_info.cpp
+│   │       ├── embedded/device_adapter.cpp
+│   │       ├── fea/
+│   │       │   ├── thermal_1d.cpp
+│   │       │   └── thermal_batch.cpp
+│   │       ├── main.cpp
+│   │       ├── ml/backprop.cpp
+│   │       ├── multicore/thread_pool.cpp
+│   │       └── server/http_server.cpp
+│   └── frontend/
+│       ├── public/
+│       │   ├── index.html
+│       │   └── styles.css
+│       └── src/
+│           ├── app.js
+│           ├── chart_engine.js
+│           ├── renderer3d.js
+│           ├── view_geometry.js
+│           ├── view_hardware.js
+│           ├── view_performance.js
+│           └── view_thermal.js
+└── tests/test_main.cpp            # Positive, negative, and numerical checks
 ```
+
+`Launch.exe` and the Windows server are generated by `scripts/build_windows_runtime.ps1`; they are not present in this checkout. The supplied MOV is shorter than the video requirement, so the package uses its timestamped screenshot walkthrough and separate HTTP verification log. The packager also creates `docs/submission_history.bundle` from committed `main` immediately before building the final archive.
 
 ---
 

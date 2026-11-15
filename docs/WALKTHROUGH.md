@@ -8,7 +8,7 @@
 
 Eight static screenshots showing the four workbench views are stored in [`screenshots/`](screenshots/README.md). The two handwritten Task F pages are in [`handwritten_evidence/`](handwritten_evidence/). This document describes those artifacts and records reproducible command-line checks.
 
-There is no 3–5 minute video or timestamped screenshot sequence in the current folder. The screenshots are not time-stamped, and this text is a written guide rather than a recording log. The assignment's demonstration-evidence requirement is therefore still open. Do not present the screenshots as timestamped evidence.
+The user supplied `docs/demo/demo.mov`; its QuickTime metadata reports one video track and a duration of 72.875 seconds, below the assignment's 3–5 minute video requirement. To use the assignment's screenshot alternative, nine frames were extracted with real timestamps derived from the recording metadata and are linked from [`demo/screenshot_walkthrough.md`](demo/screenshot_walkthrough.md). The separate local HTTP smoke log is [`demo/verification.log`](demo/verification.log); it is clearly identified as a separate run, not console output from the recording. The walkthrough covers all four views and shows a completed performance run.
 
 Use [`demo/README.md`](demo/README.md) for the Windows capture sequence and save final evidence in `docs/demo/` before packaging.
 

@@ -1,6 +1,6 @@
 # Demo evidence capture
 
-Save either a 3–5 minute video as `demo.mp4` in this folder, or a real timestamped screenshot sequence as `screenshot_walkthrough.md` with images in `screenshots/` and a log transcript in this folder.
+Save either a 3–5 minute video as `demo.mp4` or `demo.mov` in this folder, or a real timestamped screenshot sequence as `screenshot_walkthrough.md` with images in `screenshots/` and a log transcript in this folder. The current `demo.mov` is 72.875 seconds; a timestamped screenshot walkthrough and separate HTTP verification log have been prepared from the supplied recording and a local run.
 
 ## Windows 11 capture sequence
 

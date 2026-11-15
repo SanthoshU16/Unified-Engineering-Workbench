@@ -1,2 +1,4 @@
 *.pdf binary
 *.bundle binary
+*.mov binary
+*.mp4 binary

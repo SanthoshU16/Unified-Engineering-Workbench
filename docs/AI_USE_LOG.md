@@ -9,7 +9,7 @@
 ## 1. Disclosure of AI Assistance & Tools
 
 In compliance with Section 1 and Section 8 of the assessment brief:
-- **Primary AI Model**: Google DeepMind Gemini 3.8 Flash (High Reasoning mode).
+- **Primary AI Model**: Google DeepMind Gemini 3.8 Flash , Claude Sonnet 4.6 & OpenAI GPT Luna 6
 - **Environment**: Antigravity Pair-Programming Agentic Workbench.
 - **Scope of AI Use**: Code scaffolding, mathematical verification checks, test case generation, and cross-platform CMake formulation. All derivations, numerical methods, and software architectures were independently reviewed, validated, and debugged by the candidate.
 
@@ -95,3 +95,10 @@ On 2026-11-11, OpenAI Codex assisted with a later refinement pass requested by t
 - **Edits prepared with AI assistance:** Aligned the repository layout to `src/`, `data/`, and `tests/`; updated CMake, launchers, Docker paths, sample paths, editor configuration, and packaging checks; added a native Windows launcher source and PowerShell runtime build helper; synchronized the benchmark report with the checked-in CSV; and added a six-page PDF report and renderer, dependency record, submission audit, and walkthrough notes.
 - **Validation evidence:** On macOS / Apple silicon, `./scripts/build.sh` completed and CTest passed 14/14 checks. Node.js 22.19.0 syntax checks passed for all frontend JavaScript files. The local HTTP listener was confirmed on `127.0.0.1:18080`; page, stylesheet, and module returned 200, the sample STL parsed as 72 triangles, and the synthetic CSV parsed as 1,440 nodes. Windows compilation/launch and timestamped demo evidence remain outstanding.
 - **Candidate review required:** Review these edits and run `scripts/build_windows_runtime.ps1` on Windows 11 x64 before packaging. No Windows runtime, capture timestamps, or video were fabricated during this audit.
+
+## 7. Supplied demo and README architecture update (2026-11-15)
+
+- **Candidate prompt:** The candidate provided a screen recording as demo evidence and noted that some files were missing from the README's System Architecture tree.
+- **Relevant findings:** The MOV has a video track but is 72.875 seconds, shorter than the required demonstration. The architecture tree omitted several checked-in configuration, evidence, and package-helper files.
+- **Edits prepared with AI assistance:** Added the candidate-provided recording under `docs/demo/`, extracted nine frames using the recording's embedded creation time and frame presentation timestamps, wrote a separate HTTP verification log, expanded the README tree, and added standard-library MP4/MOV inspection plus screenshot-walkthrough validation to the package preflight. The short recording was not altered or represented as meeting the video duration requirement.
+- **Validation evidence:** The movie-container parser reports one video track and 72.875 seconds. The screenshot alternative contains nine linked screenshots, timestamped captions, and a separate log file. The Windows runtime is still absent and must be built and checked.

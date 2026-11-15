@@ -25,7 +25,9 @@ This audit aligned the project to `src/`, `data/`, and `tests/`; updated CMake, 
 
 ## Final-check update (2026-11-15)
 
-Candidate ID `SanthoshU` is confirmed and recorded in the report. At the candidate's direction, the requested self-report field is omitted; the submission audit records that rubric item as unmet. The six-page report was regenerated and visually checked after this metadata update. The Windows runtime and required demonstration evidence are still absent, so the submission archive has not been produced.
+Candidate ID `SanthoshU` is confirmed and recorded in the report. At the candidate's direction, the requested self-report field is omitted; the submission audit records that rubric item as unmet. The six-page report was regenerated and visually checked after this metadata update. The Windows runtime is absent and the supplied demo clip is below the required duration, so the submission archive has not been produced.
+
+The candidate later supplied `docs/demo/demo.mov`. Its QuickTime metadata contains a video track and reports 72.875 seconds, below the video length requirement. Nine actual timestamped frames and a separate local HTTP verification log were added as the screenshot walkthrough alternative. The README architecture tree now includes the omitted configuration, evidence, and helper files, and the package preflight can inspect MP4/MOV containers or validate the screenshot alternative without FFmpeg.
 
 ## Repository and package state
 

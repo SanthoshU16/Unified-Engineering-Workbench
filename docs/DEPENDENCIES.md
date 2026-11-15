@@ -17,7 +17,7 @@ The application has no third-party runtime libraries and the frontend has no npm
 | Node.js | Not required to run | Used only for optional frontend syntax checks. |
 | ReportLab 4.5.1 | Package-time document-generation tool | Used by `scripts/render_report.py` to produce the six-page report PDF. |
 | Poppler `pdfinfo` | Package-time PDF inspection tool | Used by the package preflight to enforce the six-page report limit. |
-| FFmpeg `ffprobe` | Optional video inspection tool | Used to confirm that an MP4 demo contains a 3–5 minute video stream. |
+| Python standard library | Package-time video inspection | `scripts/probe_movie.py` checks MP4/MOV video-track presence and duration without an extra package. |
 | Git fast-export/import | Included with Git CLI | Creates the sanitized main-branch history bundle for the submission archive. |
 
 ## Verified build environment

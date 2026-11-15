@@ -26,13 +26,6 @@ if [ -e "$ARCHIVE_NAME" ]; then
     exit 1
 fi
 
-if [ -f "Launch.exe" ] && [ -f "dist/windows-x64/workbench_server.exe" ]; then
-    echo "Including the Windows x64 packaged runtime..."
-else
-    echo "[Submission blocked] Build and verify root Launch.exe and dist/windows-x64/workbench_server.exe on Windows first."
-    exit 1
-fi
-
 if grep -Eiq 'Candidate ID:.*pending' docs/REPORT.md; then
     echo "[Submission blocked] Fill the candidate ID in docs/REPORT.md before packaging."
     exit 1
@@ -43,24 +36,61 @@ if [ "$REPORT_CANDIDATE" != "$CANDIDATE_ID" ]; then
     echo "[Submission blocked] Archive CandidateID '$CANDIDATE_ID' does not match docs/REPORT.md Candidate ID '$REPORT_CANDIDATE'."
     exit 1
 fi
+VIDEO_FILE=""
 if [ -f "docs/demo/demo.mp4" ]; then
-    if [ ! -s "docs/demo/demo.mp4" ] || ! command -v ffprobe >/dev/null 2>&1; then
-        echo "[Submission blocked] Install ffprobe and provide a readable 3-5 minute video at docs/demo/demo.mp4, or provide the timestamped screenshot walkthrough."
+    VIDEO_FILE="docs/demo/demo.mp4"
+elif [ -f "docs/demo/demo.mov" ]; then
+    VIDEO_FILE="docs/demo/demo.mov"
+fi
+
+VIDEO_VALID=0
+VIDEO_SECONDS=""
+if [ -n "$VIDEO_FILE" ]; then
+    if [ ! -s "$VIDEO_FILE" ]; then
+        echo "[Submission blocked] $VIDEO_FILE is empty; replace or remove the invalid video file."
         exit 1
     fi
-    VIDEO_SECONDS="$(ffprobe -v error -select_streams v:0 -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 docs/demo/demo.mp4)"
-    VIDEO_STREAM="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_type -of csv=p=0 docs/demo/demo.mp4)"
-    if [ "$VIDEO_STREAM" != "video" ] || ! awk -v duration="$VIDEO_SECONDS" 'BEGIN { exit !(duration >= 180 && duration <= 300) }'; then
-        echo "[Submission blocked] docs/demo/demo.mp4 must contain a 3-5 minute video stream."
+    if ! VIDEO_SECONDS="$(python3 scripts/probe_movie.py "$VIDEO_FILE")"; then
+        echo "[Submission blocked] $VIDEO_FILE must be a readable MP4 or QuickTime video with a video track."
         exit 1
     fi
-elif [ -s "docs/demo/screenshot_walkthrough.md" ]; then
-    if ! grep -Eq '(^|[^0-9])[0-9]{1,2}:[0-5][0-9](:[0-5][0-9])?([^0-9]|$)' docs/demo/screenshot_walkthrough.md || ! grep -Eiq 'log|command|HTTP|output|response' docs/demo/screenshot_walkthrough.md; then
-        echo "[Submission blocked] The screenshot walkthrough must include timestamps and logs."
-        exit 1
+    if awk -v duration="$VIDEO_SECONDS" 'BEGIN { exit !(duration >= 180 && duration <= 300) }'; then
+        VIDEO_VALID=1
     fi
+fi
+
+WALKTHROUGH_VALID=0
+if [ -s "docs/demo/screenshot_walkthrough.md" ] && [ -s "docs/demo/verification.log" ] && [ -d "docs/demo/screenshots" ]; then
+    SCREENSHOT_COUNT="$(find docs/demo/screenshots -maxdepth 1 -type f -name '*.png' | wc -l | tr -d '[:space:]')"
+    if [[ "$SCREENSHOT_COUNT" =~ ^[0-9]+$ ]] && [ "$SCREENSHOT_COUNT" -ge 4 ] && grep -Eq '(^|[^0-9])[0-9]{1,2}:[0-5][0-9](:[0-5][0-9])?([^0-9]|$)' docs/demo/screenshot_walkthrough.md && grep -Eiq 'log|command|HTTP|output|response' docs/demo/screenshot_walkthrough.md; then
+        WALKTHROUGH_VALID=1
+    fi
+fi
+
+if [ "$VIDEO_VALID" -ne 1 ] && [ "$WALKTHROUGH_VALID" -ne 1 ]; then
+    if [ -n "$VIDEO_SECONDS" ]; then
+        echo "[Submission blocked] $VIDEO_FILE is ${VIDEO_SECONDS} seconds; provide a 180-300 second video or a timestamped screenshot walkthrough with logs."
+    elif [ -n "$VIDEO_FILE" ]; then
+        echo "[Submission blocked] Add a valid 3-5 minute MP4/MOV or a timestamped screenshot walkthrough with logs."
+    else
+        echo "[Submission blocked] Add a 3-5 minute demo at docs/demo/demo.mp4 or docs/demo/demo.mov, or a timestamped walkthrough with logs at docs/demo/screenshot_walkthrough.md."
+    fi
+    exit 1
+fi
+
+if [ "$VIDEO_VALID" -eq 1 ]; then
+    echo "Using the verified 3-5 minute demo video."
 else
-    echo "[Submission blocked] Add a 3-5 minute demo at docs/demo/demo.mp4 or a timestamped walkthrough with logs at docs/demo/screenshot_walkthrough.md."
+    echo "Using the timestamped screenshot walkthrough with logs ($SCREENSHOT_COUNT screenshots)."
+    if [ -n "$VIDEO_FILE" ]; then
+        echo "The shorter demo video is included as supporting evidence only (${VIDEO_SECONDS} seconds)."
+    fi
+fi
+
+if [ -f "Launch.exe" ] && [ -f "dist/windows-x64/workbench_server.exe" ]; then
+    echo "Including the Windows x64 packaged runtime..."
+else
+    echo "[Submission blocked] Build and verify root Launch.exe and dist/windows-x64/workbench_server.exe on Windows first."
     exit 1
 fi
 

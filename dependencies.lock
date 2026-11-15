@@ -21,7 +21,7 @@
   "packaging_tools": {
     "python": "3.x with ReportLab 4.5.1",
     "poppler": "pdfinfo",
-    "video_probe": "ffprobe (only when submitting demo.mp4)",
+    "video_probe": "scripts/probe_movie.py (Python standard library; MP4 and MOV)",
     "git_history": "Git fast-export/fast-import and bundle commands",
     "zip": "zip CLI",
     "git": "Git CLI"

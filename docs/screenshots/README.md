@@ -3,7 +3,7 @@
 Captured from the running Unified Engineering Workbench (local + Render deployment).  
 All views are from commit `7514553` on branch `main`.
 
-These are eight static screenshots. They have no embedded capture timestamps and are not, by themselves, the timestamped screenshot walkthrough or 3–5 minute video required by the assignment. See [`../WALKTHROUGH.md`](../WALKTHROUGH.md) for the current evidence status.
+These are eight static screenshots. They have no embedded capture timestamps and do not, by themselves, satisfy the assignment's demo-evidence requirement. The timestamped screenshots extracted from the candidate-provided recording, with a separate local verification log, are in [`../demo/screenshot_walkthrough.md`](../demo/screenshot_walkthrough.md). See [`../WALKTHROUGH.md`](../WALKTHROUGH.md) for the full evidence status.
 
 | # | File | View | What it shows |
 |---|------|------|---------------|
