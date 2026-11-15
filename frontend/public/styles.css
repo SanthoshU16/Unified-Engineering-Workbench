@@ -1170,6 +1170,7 @@ table.hardware-matrix td small { margin-top: 4px; color: var(--text-muted); font
   #view-performance .benchmark-config-footer { align-items: stretch; flex-direction: column; }
   #view-performance .benchmark-actions { display: grid; grid-template-columns: 1fr 1.2fr; }
   #view-performance .benchmark-actions .btn-primary { min-width: 0; }
+  #view-performance .benchmark-actions #bench-run-btn { grid-column: 1 / -1; }
   #view-performance .benchmark-kpis { gap: 8px; }
   #view-performance .benchmark-kpi { min-height: 84px; padding: 11px; }
   #view-performance .benchmark-kpi strong { font-size: 17px; }

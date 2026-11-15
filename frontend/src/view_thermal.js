@@ -113,16 +113,40 @@ function initFEASolver() {
 
     const solveBtn = document.getElementById('fea-solve-btn');
     const exportBtn = document.getElementById('fea-export-btn');
+    const resetBtn = document.getElementById('fea-reset-btn');
     const lengthInput = document.getElementById('fea-input-L');
     updateFEAMeshOptionLabels(parseFloat(lengthInput.value));
     lengthInput.addEventListener('input', () => updateFEAMeshOptionLabels(parseFloat(lengthInput.value)));
 
     solveBtn.addEventListener('click', runFEASolve);
     exportBtn.addEventListener('click', exportFEACSV);
+    resetBtn.addEventListener('click', resetFEAModel);
     exportBtn.disabled = true;
     setFEAVisualization('profile');
 
     // Initial FEA solve
+    runFEASolve();
+}
+
+function resetFEAModel() {
+    if (document.getElementById('fea-reset-btn').disabled) return;
+
+    const defaults = {
+        'fea-input-L': '1.0',
+        'fea-input-A': '0.0001',
+        'fea-input-k': '10.0',
+        'fea-input-q': '10000.0',
+        'fea-input-T0': '100.0',
+        'fea-input-TL': '20.0',
+        'fea-input-N': '10'
+    };
+    Object.entries(defaults).forEach(([id, value]) => {
+        document.getElementById(id).value = value;
+    });
+    updateFEAMeshOptionLabels(1.0);
+    document.querySelector('.thermal-notes').open = false;
+    setFEAVisualization('profile');
+    AppState.hideAlert();
     runFEASolve();
 }
 
@@ -149,6 +173,7 @@ async function runFEASolve() {
     updateFEAMeshOptionLabels(L);
     const solveBtn = document.getElementById('fea-solve-btn');
     const exportBtn = document.getElementById('fea-export-btn');
+    const resetBtn = document.getElementById('fea-reset-btn');
 
     lastFEAResult = null;
     exportBtn.disabled = true;
@@ -167,6 +192,7 @@ async function runFEASolve() {
     }
 
     solveBtn.disabled = true;
+    resetBtn.disabled = true;
     solveBtn.innerHTML = '<span aria-hidden="true">◌</span> Solving…';
     setThermalStatus(document.getElementById('fea-run-status'), 'busy', 'Solving model');
     AppState.setStatus('Solving thermal model and convergence study', 'busy');
@@ -200,6 +226,7 @@ async function runFEASolve() {
         setThermalStatus(document.getElementById('fea-run-status'), 'error', 'Solve failed');
     } finally {
         solveBtn.disabled = false;
+        resetBtn.disabled = false;
         solveBtn.innerHTML = '<span aria-hidden="true">▶</span> Solve model';
     }
 }

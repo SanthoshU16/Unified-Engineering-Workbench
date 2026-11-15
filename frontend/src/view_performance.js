@@ -8,9 +8,11 @@ const MAX_REPETITIONS = 50;
 export function initPerformanceView() {
     const runBtn = document.getElementById('bench-run-btn');
     const exportBtn = document.getElementById('bench-export-btn');
+    const resetBtn = document.getElementById('bench-reset-btn');
 
     runBtn.addEventListener('click', runBenchmark);
     exportBtn.addEventListener('click', exportBenchmarkCSV);
+    resetBtn.addEventListener('click', resetBenchmark);
 
     document.querySelectorAll('[data-viz-mode]').forEach(button => {
         button.addEventListener('click', () => setVisualizationMode(button.dataset.vizMode));
@@ -39,6 +41,7 @@ async function runBenchmark() {
 
     const runBtn = document.getElementById('bench-run-btn');
     runBtn.disabled = true;
+    document.getElementById('bench-reset-btn').disabled = true;
     runBtn.setAttribute('aria-busy', 'true');
     runBtn.querySelector('.button-label').textContent = 'Running benchmark…';
     setRunState('busy', 'Benchmark running');
@@ -66,9 +69,66 @@ async function runBenchmark() {
         setRunState('error', 'Run failed');
     } finally {
         runBtn.disabled = false;
+        document.getElementById('bench-reset-btn').disabled = false;
         runBtn.removeAttribute('aria-busy');
         runBtn.querySelector('.button-label').textContent = 'Run benchmark';
     }
+}
+
+function resetBenchmark() {
+    const resetBtn = document.getElementById('bench-reset-btn');
+    if (resetBtn.disabled) return;
+
+    document.getElementById('bench-cases').value = '2000';
+    document.getElementById('bench-mesh').value = '100';
+    document.getElementById('bench-seed').value = '42';
+    document.getElementById('bench-reps').value = '5';
+    lastBenchmarkResult = null;
+    visualizationMode = 'time';
+
+    document.getElementById('bench-kpi-runtime').textContent = '—';
+    document.getElementById('bench-kpi-runtime-detail').textContent = 'Waiting for a benchmark';
+    document.getElementById('bench-kpi-speedup').textContent = '—';
+    document.getElementById('bench-kpi-speedup-detail').textContent = 'Relative to the serial run';
+    document.getElementById('bench-kpi-workload').textContent = '—';
+    document.getElementById('bench-kpi-workload-detail').textContent = 'Cases · mesh · repetitions';
+    const checkKpi = document.getElementById('bench-kpi-check');
+    checkKpi.textContent = '—';
+    checkKpi.removeAttribute('data-state');
+    document.getElementById('bench-kpi-check-detail').textContent = 'Serial compared with parallel';
+
+    const badge = document.getElementById('bench-agreement-badge');
+    badge.style.display = 'none';
+    badge.removeAttribute('data-state');
+    const assessmentNote = document.getElementById('bench-assessment-note');
+    assessmentNote.style.display = 'none';
+    assessmentNote.textContent = '';
+    document.getElementById('bench-export-btn').hidden = true;
+    document.getElementById('bench-table-summary').textContent = 'Repetition times and derived scaling metrics';
+
+    const header = document.getElementById('bench-results-head');
+    header.replaceChildren(...[
+        'Worker threads', 'Rep 1 (ms)', 'Rep 2 (ms)', 'Rep 3 (ms)', 'Rep 4 (ms)',
+        'Rep 5 (ms)', 'Median (ms)', 'Speedup', 'Efficiency'
+    ].map(label => {
+        const th = document.createElement('th');
+        th.textContent = label;
+        return th;
+    }));
+    document.getElementById('bench-results-tbody').innerHTML =
+        '<tr><td colspan="9" class="empty-results">Run a benchmark to see repetition timings and scaling metrics.</td></tr>';
+
+    document.getElementById('hw-ram').textContent = '—';
+    document.getElementById('hw-bench-warmup').textContent = '—';
+    document.getElementById('hw-launch').textContent = '—';
+    setRunState('ready', 'Ready to run');
+    document.querySelectorAll('[data-viz-mode]').forEach(button => {
+        const selected = button.dataset.vizMode === visualizationMode;
+        button.classList.toggle('active', selected);
+        button.setAttribute('aria-pressed', String(selected));
+    });
+    AppState.hideAlert();
+    renderVisualization(null, visualizationMode);
 }
 
 function setRunState(state, label) {
@@ -203,7 +263,14 @@ function renderVisualization(data, mode) {
     title.textContent = copy[0];
     description.textContent = copy[1];
 
-    if (!data) return;
+    if (!data) {
+        stage.innerHTML = `<div class="chart-empty-state" role="status">
+          <span class="chart-empty-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19V5m0 14h16M7 15l4-4 3 2 5-6"></path><circle cx="7" cy="15" r="1"></circle><circle cx="11" cy="11" r="1"></circle><circle cx="14" cy="13" r="1"></circle><circle cx="19" cy="7" r="1"></circle></svg></span>
+          <strong>No benchmark results yet</strong>
+          <span>Configure the workload above and run a benchmark. Switch views here to explore timing, scaling, and repeatability.</span>
+        </div>`;
+        return;
+    }
     if ((mode === 'speedup' || mode === 'efficiency') && !data.speedup_assessable) {
         const heading = mode === 'speedup' ? 'Speedup not assessable' : 'Efficiency not assessable';
         const reason = data.logical_cpus === 1

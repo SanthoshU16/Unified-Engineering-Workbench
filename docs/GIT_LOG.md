@@ -11,7 +11,8 @@
 ## 1. Commit Topology & History
 
 ```text
-* [pending] perf: optimize batch solver memory and tune default benchmark workload for cloud containers
+* [pending] feat(ui): add Reset buttons for Performance Lab and Thermal FEA; improve empty-state chart UX
+* cbb7db3 perf: optimize batch solver memory and tune default benchmark workload for cloud containers
 * 98bfe68 docs: replace ssh remote references with https across documentation
 * b5fcd08 feat(deploy): add multi-stage Dockerfile and render.yaml for Render deployment
 * 5132661 docs: synchronize git log and update verified git bundle
