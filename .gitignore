@@ -1,0 +1,16 @@
+/build/
+/cmake-build-*/
+
+# Allow VS Code run/build configurations
+!.vscode/
+!.vscode/launch.json
+!.vscode/tasks.json
+
+# IDE user temporary files
+.idea/
+*.swp
+*.swo
+
+# Operating system files
+.DS_Store
+Thumbs.db

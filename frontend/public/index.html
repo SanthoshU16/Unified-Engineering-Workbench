@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unified Engineering Workbench</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="app-rail" id="app-rail">
+      <div class="brand">
+        <div class="brand-logo" aria-hidden="true">UEW</div>
+        <div class="brand-copy">
+          <div class="brand-title"><span>Unified Engineering</span><strong>Workbench</strong></div>
+          <div class="brand-subtitle">ENGINEERING WORKSPACE</div>
+        </div>
+        <button class="rail-toggle" id="rail-toggle" type="button" aria-label="Collapse navigation" aria-controls="app-rail" aria-expanded="true" title="Collapse navigation">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="15" rx="2.5"></rect><path d="M9 4.5v15m7-10-3 3 3 3"></path></svg>
+        </button>
+      </div>
+
+      <div class="rail-section-label">WORKSPACE</div>
+      <nav class="tabs" aria-label="Workbench modules">
+        <button class="tab-btn active" type="button" data-tab="geometry" aria-label="Geometry · STL inspection" title="Geometry · STL inspection" aria-controls="view-geometry" aria-current="page">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m12 3 8 4.5-8 4.5-8-4.5L12 3Z"></path><path d="m4 12 8 4.5 8-4.5M4 16.5l8 4.5 8-4.5"></path></svg>
+          <span><strong>Geometry</strong><small>STL inspection</small></span>
+        </button>
+        <button class="tab-btn" type="button" data-tab="thermal" aria-label="Thermal analysis · FEA and field data" title="Thermal analysis · FEA and field data" aria-controls="view-thermal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M14 14.7V5a3 3 0 0 0-6 0v9.7a5 5 0 1 0 6 0Z"></path><path d="M11 8v9"></path></svg>
+          <span><strong>Thermal analysis</strong><small>FEA &amp; field data</small></span>
+        </button>
+        <button class="tab-btn" type="button" data-tab="performance" aria-label="Performance · Parallel scaling" title="Performance · Parallel scaling" aria-controls="view-performance">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3.5 2"></path></svg>
+          <span><strong>Performance</strong><small>Parallel scaling</small></span>
+        </button>
+        <button class="tab-btn" type="button" data-tab="hardware" aria-label="Hardware · Device workbench" title="Hardware · Device workbench" aria-controls="view-hardware">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2"></rect><path d="M9 9h6v6H9zM9 2v3m6-3v3M9 19v3m6-3v3M2 9h3m-3 6h3m14-6h3m-3 6h3"></path></svg>
+          <span><strong>Hardware</strong><small>Device workbench</small></span>
+        </button>
+      </nav>
+
+      <div class="rail-spacer"></div>
+      <div class="rail-workspace-footer" id="rail-host-device" aria-label="Host device profile" title="Reading host profile">
+        <span class="rail-footer-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3.5" y="4.5" width="17" height="12" rx="2"></rect><path d="M8 20h8m-4-3.5V20m-6-12h11"></path></svg></span>
+        <span class="rail-footer-copy"><small>HOST DEVICE</small><strong id="rail-host-name">Detecting host…</strong><span class="rail-footer-meta" id="rail-host-meta">Reading system profile</span></span>
+        <span class="rail-footer-status" id="rail-host-status" title="Loading host profile" aria-label="Loading host profile"></span>
+      </div>
+      <div class="rail-version"><span>UEW</span><span>Engineering tools</span></div>
+    </aside>
+
+    <div class="workspace-shell">
+      <header class="workspace-header">
+        <div class="header-leading">
+          <div class="page-identity">
+            <div class="page-eyebrow">WORKSPACE <span>/</span> <span id="workspace-section">GEOMETRY</span></div>
+            <h1 id="workspace-title">CAD Geometry</h1>
+            <p id="workspace-description">Import, inspect, and validate STL models.</p>
+          </div>
+        </div>
+      </header>
+
+      <div id="alert-banner" role="alert" aria-live="polite">
+        <span id="alert-message">Actionable alert text</span>
+        <button class="alert-close" id="alert-close-btn" type="button" aria-label="Dismiss notification">&times;</button>
+      </div>
+
+  <!-- Main Viewports -->
+  <main>
+    <!-- Node Tooltip for 3D inspection -->
+    <div id="node-tooltip" class="node-tooltip"></div>
+
+    <!-- VIEW 1: GEOMETRY (STL) -->
+    <section id="view-geometry" class="view-container active">
+      <aside class="sidebar-panel geometry-sidebar" aria-label="Geometry model setup">
+        <header class="geometry-sidebar-header">
+          <div>
+            <span class="geometry-kicker">MODEL WORKSPACE</span>
+            <h2>Open a model</h2>
+            <p>Import an STL surface for inspection.</p>
+          </div>
+          <span id="stl-model-badge" class="geometry-state is-loading" role="status" aria-live="polite">Loading</span>
+        </header>
+
+        <section class="geometry-form-section" aria-labelledby="stl-sample-heading">
+          <div class="geometry-section-heading">
+            <h3 id="stl-sample-heading">Sample model</h3>
+            <span>CC0</span>
+          </div>
+          <select id="stl-file-select" class="form-select" aria-label="Choose a sample STL model">
+            <option value="" disabled>Choose a sample…</option>
+            <option value="samples/geometry/sample_heatsink.stl" data-units="m">Heat sink · 72 triangles</option>
+          </select>
+          <p class="geometry-help">Self-created assessment specimen. Coordinates are in metres; licensed CC0 1.0.</p>
+        </section>
+
+        <section class="geometry-form-section" aria-labelledby="stl-units-heading">
+          <div class="geometry-section-heading">
+            <h3 id="stl-units-heading">Coordinate units</h3>
+            <span>Source scale</span>
+          </div>
+          <select id="stl-coordinate-units" class="form-select" aria-describedby="stl-units-help">
+            <option value="mm" selected>Millimetres (mm)</option>
+            <option value="m">Metres (m)</option>
+            <option value="in">Inches (in)</option>
+          </select>
+          <p id="stl-units-help" class="geometry-help">STL has no unit metadata. Dimensions are reported in mm using this selection.</p>
+        </section>
+
+        <section class="geometry-form-section" aria-labelledby="stl-import-heading">
+          <div class="geometry-section-heading">
+            <h3 id="stl-import-heading">Import from device</h3>
+            <span>STL</span>
+          </div>
+          <div class="file-drop geometry-dropzone" id="stl-dropzone">
+            <div class="file-drop-mark" aria-hidden="true">↥</div>
+            <div class="file-drop-copy">
+              <strong id="stl-file-name">Drop an STL file here</strong>
+              <small>150 MiB max · 200k triangles · ASCII or binary</small>
+            </div>
+            <button id="stl-choose-btn" class="btn btn-quiet btn-sm" type="button">Browse</button>
+            <input type="file" id="stl-file-input" accept=".stl,model/stl" aria-label="Choose an STL file">
+          </div>
+          <button id="stl-parse-btn" class="btn btn-primary geometry-import-btn" type="button">Load model</button>
+        </section>
+
+        <section id="stl-meta-card" class="model-report geometry-properties" style="display:none;" aria-label="Imported model properties">
+          <div class="geometry-section-heading">
+            <h3>Part properties</h3>
+            <span>Validated</span>
+          </div>
+          <div class="report-row"><span>Solid</span><strong id="stl-meta-name">—</strong></div>
+          <div class="report-row"><span>Triangles</span><strong id="stl-meta-triangles">—</strong></div>
+          <div class="report-row"><span>Dimensions</span><strong id="stl-meta-dims">—</strong></div>
+          <div class="report-row"><span>File size</span><strong id="stl-meta-size">—</strong></div>
+        </section>
+
+        <p class="geometry-scope-note"><strong>STL surface</strong><span>Solid features and material data are not stored in this file.</span></p>
+      </aside>
+
+      <section class="viewport-panel geometry-viewport" aria-label="3D model viewport">
+        <header class="geometry-viewport-header">
+          <div>
+            <span class="geometry-kicker">3D MODEL VIEW</span>
+            <h2 id="stl-viewport-title">Surface inspection</h2>
+            <p id="stl-viewport-summary">Load a sample or import an STL to inspect its surface.</p>
+          </div>
+          <span class="geometry-view-chip"><span class="geometry-chip-dot"></span><span id="stl-display-mode">Shaded surface</span></span>
+        </header>
+
+        <div class="geometry-toolbar">
+          <div class="geometry-toolbar-group" role="group" aria-label="Standard camera views">
+            <span class="geometry-toolbar-label">View</span>
+            <button class="geometry-tool-btn" type="button" data-stl-view="iso" title="Isometric view">Iso</button>
+            <button class="geometry-tool-btn" type="button" data-stl-view="front" title="Front view">Front</button>
+            <button class="geometry-tool-btn" type="button" data-stl-view="top" title="Top view">Top</button>
+            <button class="geometry-tool-btn" type="button" data-stl-view="right" title="Right view">Right</button>
+          </div>
+          <div class="geometry-toolbar-group geometry-toolbar-actions" role="group" aria-label="Viewport tools">
+            <button id="stl-fit-btn" class="geometry-tool-btn" type="button" title="Fit model to viewport" aria-label="Fit model to viewport" disabled>Fit</button>
+            <button id="stl-wire-btn" class="geometry-tool-btn" type="button" title="Toggle shaded and wireframe display" aria-pressed="false" disabled>Wireframe</button>
+          </div>
+        </div>
+
+        <div class="canvas-wrapper geometry-canvas-wrapper">
+          <canvas id="canvas-stl" class="interactive-canvas"></canvas>
+          <div class="geometry-canvas-hud" aria-hidden="true">
+            <span class="geometry-hud-mark">3D</span>
+            <span>World coordinates · dimensions in mm</span>
+          </div>
+        </div>
+
+        <footer class="geometry-viewport-footer">
+          <span>Drag to orbit <i></i> Shift-drag to pan <i></i> Scroll to zoom</span>
+          <span id="stl-viewport-facets">Waiting for model</span>
+        </footer>
+      </section>
+    </section>
+
+    <!-- VIEW 2: THERMAL ANALYSIS (ANSYS + 1D FEA) -->
+    <section id="view-thermal" class="view-container thermal-view">
+      <aside class="thermal-control-panel">
+        <div class="thermal-mode-header">
+          <div class="section-eyebrow">ANALYSIS WORKSPACE</div>
+          <h2>Choose a workflow</h2>
+          <p>Set up a rod simulation or inspect a nodal temperature field.</p>
+        </div>
+        <div class="thermal-mode-switch" role="group" aria-label="Thermal analysis workflow">
+          <button class="thermal-mode-tab active" type="button" aria-pressed="true" aria-controls="fea-controls-panel fea-display-area" data-thermal-mode="fea">
+            <span class="mode-tab-icon" aria-hidden="true">1D</span>
+            <span><strong>Rod solver</strong><small>FEA model</small></span>
+          </button>
+          <button class="thermal-mode-tab" type="button" aria-pressed="false" aria-controls="ansys-controls-panel ansys-display-area" data-thermal-mode="ansys">
+            <span class="mode-tab-icon field-icon" aria-hidden="true">3D</span>
+            <span><strong>3D visualizer</strong><small>Rod or CSV field</small></span>
+          </button>
+        </div>
+        <select id="thermal-mode-select" hidden aria-hidden="true" tabindex="-1">
+          <option value="fea" selected>1D Mechanical Thermal FEA Solver</option>
+          <option value="ansys">ANSYS 3D Nodal Temperature Export</option>
+        </select>
+
+        <div id="fea-controls-panel" class="thermal-mode-panel">
+          <div class="thermal-section-title"><span>Model setup</span><span class="required-note">SI units</span></div>
+          <div class="thermal-field-grid">
+            <div class="thermal-field">
+              <label for="fea-input-L"><span>Rod length</span><small>m</small></label>
+              <input type="number" id="fea-input-L" value="1.0" step="0.1" class="form-input">
+            </div>
+            <div class="thermal-field">
+              <label for="fea-input-A"><span>Cross-section</span><small>m²</small></label>
+              <input type="number" id="fea-input-A" value="0.0001" step="0.00001" class="form-input">
+            </div>
+            <div class="thermal-field">
+              <label for="fea-input-k"><span>Conductivity</span><small>W/(m·K)</small></label>
+              <input type="number" id="fea-input-k" value="10.0" step="1" class="form-input">
+            </div>
+            <div class="thermal-field">
+              <label for="fea-input-q"><span>Heat generation</span><small>W/m³</small></label>
+              <input type="number" id="fea-input-q" value="10000.0" step="500" class="form-input">
+            </div>
+          </div>
+
+          <div class="thermal-section-title boundary-title"><span>End temperatures</span><span class="required-note">Dirichlet</span></div>
+          <div class="thermal-field-grid boundary-grid">
+            <div class="thermal-field">
+              <label for="fea-input-T0"><span>At x = 0</span><small>°C</small></label>
+              <input type="number" id="fea-input-T0" value="100.0" class="form-input">
+            </div>
+            <div class="thermal-field">
+              <label for="fea-input-TL"><span>At x = L</span><small>°C</small></label>
+              <input type="number" id="fea-input-TL" value="20.0" class="form-input">
+            </div>
+          </div>
+
+          <div class="thermal-field mesh-field">
+            <label for="fea-input-N"><span>Mesh resolution</span><small>elements</small></label>
+            <select id="fea-input-N" class="form-select">
+              <option value="10" selected>N = 10 · h = 0.100 m</option>
+              <option value="20">N = 20 · h = 0.050 m</option>
+              <option value="40">N = 40 · h = 0.025 m</option>
+              <option value="80">N = 80 · h = 0.0125 m</option>
+            </select>
+          </div>
+
+          <div class="thermal-action-stack">
+            <button id="fea-solve-btn" class="btn btn-primary thermal-primary-action" type="button"><span aria-hidden="true">▶</span> Solve model</button>
+            <button id="fea-export-btn" class="btn thermal-secondary-action" type="button" disabled><span aria-hidden="true">↓</span> Export results CSV</button>
+          </div>
+          <details class="thermal-notes">
+            <summary>Model assumptions &amp; reading the error</summary>
+            <p><strong>Model:</strong> steady-state, one-dimensional conduction with constant material properties and cross-section, uniform internal heat generation, and insulated rod sides. Length is in metres, area in m², conductivity in W/(m·K), heat generation in W/m³, and temperature in °C.</p>
+            <p><strong>Boundary conditions:</strong> the entered temperatures are prescribed at both ends.</p>
+            <p><strong>Midpoint error:</strong> this quadratic exact solution matches the linear finite-element values at mesh nodes. Midpoints reveal interpolation error; halving element size reduces it by about four times.</p>
+          </details>
+        </div>
+
+        <div id="ansys-controls-panel" class="thermal-mode-panel" hidden>
+          <div class="thermal-section-title"><span>3D visualization source</span><span class="required-note">Choose data</span></div>
+          <div class="thermal-source-switch" role="group" aria-label="3D temperature visualization source">
+            <button class="thermal-source-tab active" type="button" aria-pressed="true" data-thermal-source="rod">Solved rod</button>
+            <button class="thermal-source-tab" type="button" aria-pressed="false" data-thermal-source="csv">CSV point cloud</button>
+          </div>
+          <div id="thermal-rod-source-panel" class="thermal-source-panel">
+            <div class="thermal-source-callout"><span class="source-check">✓</span><div><strong>Linked to the rod solver</strong><p>Temperature is mapped onto the solved rod. Fine rings mark each mesh element.</p></div></div>
+            <div class="thermal-source-metrics">
+              <div><span>Mesh nodes</span><strong id="thermal-rod-node-count">—</strong></div>
+              <div><span>Rod length</span><strong id="thermal-rod-length">—</strong></div>
+              <div><span>Temperature span</span><strong id="thermal-rod-temp-range">—</strong></div>
+            </div>
+            <button id="thermal-open-solver" class="btn thermal-secondary-action" type="button">Edit rod model</button>
+          </div>
+          <div id="thermal-csv-source-panel" class="thermal-source-panel" hidden>
+            <label class="thermal-field" for="ansys-file-select">
+              <span class="field-caption">Use a sample</span>
+              <select id="ansys-file-select" class="form-select">
+                <option value="samples/thermal/ansys_nodal_temperature.csv">Synthetic ANSYS-style CSV · 1,440 nodes</option>
+              </select>
+            </label>
+            <label class="thermal-upload" for="ansys-file-input">
+              <span class="upload-icon" aria-hidden="true">↑</span>
+              <span class="upload-copy"><strong>Choose a nodal CSV</strong><small>node_id, x/y/z in metres, temperature in °C</small></span>
+              <input type="file" id="ansys-file-input" accept=".csv,text/csv">
+            </label>
+            <p class="thermal-help">CSV point clouds are standalone datasets. They are not registered to the CAD model or rod.</p>
+            <button id="ansys-parse-btn" class="btn btn-primary thermal-primary-action" type="button"><span aria-hidden="true">↥</span> Load dataset</button>
+            <div id="ansys-meta-card" class="thermal-dataset-card" hidden>
+              <div class="dataset-card-heading"><span class="dataset-live-dot"></span><span>Dataset loaded</span></div>
+              <div class="dataset-stat"><span>Nodes</span><strong id="ansys-meta-nodes">—</strong></div>
+              <div class="dataset-stat"><span>Temperature range</span><strong id="ansys-meta-range">—</strong></div>
+              <div class="dataset-stat"><span>Mean temperature</span><strong id="ansys-meta-mean">—</strong></div>
+              <div class="dataset-limit">Limit 50 MiB · 200,000 nodes</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <section class="thermal-results-panel viewport-panel" aria-label="Thermal analysis results">
+        <div id="fea-display-area" class="thermal-result-view">
+          <header class="thermal-results-header">
+            <div>
+              <div class="section-eyebrow">STEADY-STATE CONDUCTION</div>
+              <h2>Rod temperature analysis</h2>
+              <p>Finite-element solution compared with the analytical profile.</p>
+            </div>
+            <span id="fea-run-status" class="thermal-status" role="status" aria-live="polite"><i></i><span>Ready</span></span>
+          </header>
+          <div class="thermal-kpi-row" aria-label="Solution summary">
+            <div class="thermal-kpi"><span>Peak temperature</span><strong id="fea-stat-peak">—</strong><small id="fea-stat-peak-position">Solve to calculate</small></div>
+            <div class="thermal-kpi"><span>Max midpoint error</span><strong id="fea-stat-midpoint">—</strong><small>Against exact solution</small></div>
+            <div class="thermal-kpi"><span>Max nodal error</span><strong id="fea-stat-nodal">—</strong><small>At mesh nodes</small></div>
+            <div class="thermal-kpi"><span>Current mesh</span><strong id="fea-stat-mesh">—</strong><small id="fea-stat-spacing">Element spacing</small></div>
+          </div>
+          <div class="thermal-visual-card">
+            <div class="thermal-visual-toolbar">
+              <div class="thermal-view-tabs" role="tablist" aria-label="FEA result visualization">
+                <button id="thermal-tab-profile" class="thermal-view-tab active" type="button" role="tab" tabindex="0" aria-selected="true" aria-controls="thermal-viz-profile" data-fea-view="profile">Temperature profile</button>
+                <button id="thermal-tab-convergence" class="thermal-view-tab" type="button" role="tab" tabindex="-1" aria-selected="false" aria-controls="thermal-viz-convergence" data-fea-view="convergence">Mesh convergence</button>
+                <button id="thermal-tab-data" class="thermal-view-tab" type="button" role="tab" tabindex="-1" aria-selected="false" aria-controls="thermal-viz-data" data-fea-view="data">Convergence data</button>
+              </div>
+              <span class="thermal-equation">−d/dx(kA dT/dx) = qA</span>
+            </div>
+            <section id="thermal-viz-profile" class="thermal-viz-panel active" role="tabpanel" aria-labelledby="thermal-tab-profile" tabindex="0">
+              <div class="thermal-viz-heading"><div><h3>Temperature along the rod</h3><p>Continuous analytical solution and discrete finite-element nodes</p></div><span class="plot-unit">POSITION · m &nbsp; / &nbsp; TEMPERATURE · °C</span></div>
+              <div class="thermal-chart-frame"><canvas id="canvas-fea-plot" role="img" aria-label="Temperature along the rod, comparing the analytical solution with finite-element nodes"></canvas></div>
+              <div class="thermal-chart-footnote"><span class="legend-dot exact-dot"></span> Exact analytical solution <span class="legend-dot fea-dot"></span> FEA nodes connected by linear elements</div>
+            </section>
+            <section id="thermal-viz-convergence" class="thermal-viz-panel" role="tabpanel" aria-labelledby="thermal-tab-convergence" tabindex="0" hidden>
+              <div class="thermal-viz-heading"><div><h3>Mesh convergence</h3><p>Measured midpoint error by mesh; each interval shows the observed order and error reduction</p></div><span class="plot-unit">LOG–LOG · 10 / 20 / 40 / 80 ELEMENTS</span></div>
+              <div class="thermal-convergence-summary" aria-label="Convergence summary">
+                <div><span>Observed order</span><strong id="fea-conv-order">—</strong><small>Expected: 2 for linear elements</small></div>
+                <div><span>Error reduction</span><strong id="fea-conv-reduction">—</strong><small>Coarsest to finest mesh</small></div>
+                <div><span>Analytical check</span><strong id="fea-conv-agreement">—</strong><small>E = |q|h² / 8k for this model</small></div>
+              </div>
+              <div class="thermal-chart-frame"><canvas id="canvas-convergence-plot" role="img" aria-label="Log-log mesh convergence plot showing measured midpoint errors, mesh labels, and observed convergence order"></canvas></div>
+              <div class="thermal-chart-footnote"><span class="legend-dot empirical-dot"></span> Measured midpoint error <span>·</span> interval labels show reduction and order p <span>·</span> the O(h²) reference coincides for this model</div>
+            </section>
+            <section id="thermal-viz-data" class="thermal-viz-panel" role="tabpanel" aria-labelledby="thermal-tab-data" tabindex="0" hidden>
+              <div class="thermal-viz-heading"><div><h3>Convergence results</h3><p>Each row is a separate solve; the selected solver mesh is highlighted</p></div><span id="fea-conv-mesh-note" class="plot-unit">Study meshes: N = 10 · 20 · 40 · 80</span></div>
+              <p class="thermal-convergence-note">For constant k and uniform q, this quadratic solution gives the exact midpoint interpolation error E = |q|h²/(8k). Area and end temperatures change the temperature field, but cancel out of this error measure.</p>
+              <div class="data-table-wrapper thermal-table-wrapper">
+                <table class="data-table" id="fea-conv-table">
+                  <thead><tr><th>Elements N</th><th>Element length h (m)</th><th>Measured midpoint error (°C)</th><th>Analytical prediction (°C)</th><th>Reduction vs previous mesh</th><th>Observed order p</th></tr></thead>
+                  <tbody id="fea-conv-tbody"></tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+          <footer class="thermal-results-foot"><span>Assumptions: constant properties · uniform heat generation · insulated sides</span><span>Results update after each solve</span></footer>
+        </div>
+
+        <div id="ansys-display-area" class="thermal-result-view" hidden>
+          <header class="thermal-results-header">
+            <div><div id="thermal-3d-eyebrow" class="section-eyebrow">3D ROD VISUALIZATION</div><h2 id="thermal-3d-title">Solved rod temperature</h2><p id="thermal-3d-description">Temperature mapped over the rod · fine rings mark the finite-element mesh.</p></div>
+            <div class="thermal-viewer-actions"><span id="ansys-result-state" class="thermal-status" role="status" aria-live="polite"><i></i><span>Choose a dataset</span></span><button id="ansys-fit-btn" class="btn thermal-fit-btn" type="button" disabled>Fit view</button></div>
+          </header>
+          <div class="thermal-pointcloud-frame">
+            <canvas id="canvas-ansys" class="interactive-canvas" role="img" aria-label="Interactive 3D point cloud colored by nodal temperature"></canvas>
+            <canvas id="canvas-ansys-overlay" class="thermal-point-overlay" aria-hidden="true"></canvas>
+            <div class="colormap-legend"><div class="legend-heading">Temperature <span>°C</span></div><div class="colormap-bar"></div><div class="colormap-labels"><span id="legend-min-temp">—</span><span id="legend-mid-temp">—</span><span id="legend-max-temp">—</span></div><div class="legend-scale-labels"><span>MIN</span><span>MID-RANGE</span><span>MAX</span></div></div>
+            <div id="thermal-rod-axis" class="thermal-rod-axis"><span id="thermal-rod-start">x = 0 m</span><span id="thermal-rod-axis-line"></span><strong id="thermal-rod-axis-title">Rod axis · x</strong><span id="thermal-rod-end">x = 1 m</span></div>
+            <div id="thermal-3d-hint" class="pointcloud-hint">Drag to rotate <span>·</span> Shift-drag to pan <span>·</span> Scroll to zoom</div>
+          </div>
+          <footer class="thermal-results-foot"><span id="thermal-3d-footer-left">Rod axis: x · Length: m · Temperature: °C</span><span id="thermal-3d-footer-right">Cross-section enlarged schematically for visibility</span></footer>
+        </div>
+      </section>
+    </section>
+
+    <!-- VIEW 3: PERFORMANCE -->
+    <section id="view-performance" class="view-container performance-view">
+      <section class="benchmark-config-card" aria-labelledby="benchmark-config-title">
+        <div class="benchmark-config-heading">
+          <div>
+            <div class="section-eyebrow">BENCHMARK CONFIGURATION</div>
+            <h2 id="benchmark-config-title">Thermal batch solver</h2>
+            <p>Set a repeatable workload, then compare serial and parallel execution.</p>
+          </div>
+          <span id="bench-run-state" class="run-state" data-state="ready"><span class="run-state-dot"></span><span>Ready to run</span></span>
+        </div>
+
+        <div class="benchmark-form-grid">
+          <div class="control-group">
+            <label class="control-label" for="bench-cases">Thermal cases</label>
+            <input type="number" id="bench-cases" value="20000" min="10" step="1000" class="form-input">
+            <small class="field-help">Independent solves in each run</small>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="bench-mesh">Mesh elements</label>
+            <input type="number" id="bench-mesh" value="200" min="5" step="20" class="form-input">
+            <small class="field-help">Elements per thermal case</small>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="bench-seed">Random seed</label>
+            <input type="number" id="bench-seed" value="42" class="form-input">
+            <small class="field-help">Keeps generated cases repeatable</small>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="bench-reps">Measured repetitions</label>
+            <input type="number" id="bench-reps" value="5" min="1" max="50" step="1" class="form-input">
+            <small class="field-help">Median is calculated from these runs</small>
+          </div>
+        </div>
+
+        <div class="benchmark-config-footer">
+          <div class="config-footnote"><span class="config-footnote-mark">i</span><span>Worker counts are selected automatically and capped at the available logical CPUs.</span></div>
+          <div class="benchmark-actions">
+            <button id="bench-export-btn" class="btn btn-secondary" type="button" hidden>
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M10 2.5v9m0 0 3.2-3.2M10 11.5 6.8 8.3M3.5 13v3.5h13V13"></path></svg>
+              Export CSV
+            </button>
+            <button id="bench-run-btn" class="btn btn-primary" type="button">
+              <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M6.4 4.3a.8.8 0 0 1 1.2-.7l7.2 5.6a1 1 0 0 1 0 1.6l-7.2 5.6a.8.8 0 0 1-1.2-.7V4.3Z"></path></svg>
+              <span class="button-label">Run benchmark</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="benchmark-kpis" aria-label="Latest benchmark summary">
+        <article class="benchmark-kpi">
+          <span class="kpi-label">Fastest median</span>
+          <strong id="bench-kpi-runtime">—</strong>
+          <small id="bench-kpi-runtime-detail">Waiting for a benchmark</small>
+        </article>
+        <article class="benchmark-kpi">
+          <span class="kpi-label">Peak speedup</span>
+          <strong id="bench-kpi-speedup">—</strong>
+          <small id="bench-kpi-speedup-detail">Relative to the serial run</small>
+        </article>
+        <article class="benchmark-kpi">
+          <span class="kpi-label">Workload</span>
+          <strong id="bench-kpi-workload">—</strong>
+          <small id="bench-kpi-workload-detail">Cases · mesh · repetitions</small>
+        </article>
+        <article class="benchmark-kpi benchmark-kpi-check">
+          <span class="kpi-label">Numerical agreement</span>
+          <strong id="bench-kpi-check">—</strong>
+          <small id="bench-kpi-check-detail">Serial compared with parallel</small>
+        </article>
+      </section>
+
+      <div class="benchmark-results-grid">
+        <section class="benchmark-chart-card" aria-labelledby="benchmark-results-title">
+          <div class="benchmark-visual-heading">
+            <div>
+              <div class="section-eyebrow">VISUAL ANALYSIS</div>
+              <h2 id="benchmark-results-title">Execution time</h2>
+              <p id="bench-visualization-description">Compare median solve time as worker count increases.</p>
+            </div>
+            <div id="bench-agreement-badge" class="agreement-badge" style="display:none;"></div>
+          </div>
+          <div class="visualization-switcher" role="group" aria-label="Choose benchmark visualization">
+            <button class="visualization-switch active" type="button" data-viz-mode="time" aria-pressed="true">Execution time</button>
+            <button class="visualization-switch" type="button" data-viz-mode="speedup" aria-pressed="false">Speedup</button>
+            <button class="visualization-switch" type="button" data-viz-mode="efficiency" aria-pressed="false">Efficiency</button>
+            <button class="visualization-switch" type="button" data-viz-mode="consistency" aria-pressed="false">Run consistency</button>
+          </div>
+          <div id="bench-assessment-note" class="assessment-note" role="status" aria-live="polite" style="display:none;"></div>
+          <div id="bench-visualization-stage" class="benchmark-chart-stage" aria-live="polite">
+            <div id="bench-chart-empty" class="chart-empty-state" role="status">
+              <span class="chart-empty-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19V5m0 14h16M7 15l4-4 3 2 5-6"></path><circle cx="7" cy="15" r="1"></circle><circle cx="11" cy="11" r="1"></circle><circle cx="14" cy="13" r="1"></circle><circle cx="19" cy="7" r="1"></circle></svg></span>
+              <strong>No benchmark results yet</strong>
+              <span>Configure the workload above and run a benchmark. Switch views here to explore timing, scaling, and repeatability.</span>
+            </div>
+          </div>
+        </section>
+
+        <aside class="benchmark-environment-card" aria-labelledby="benchmark-environment-title">
+          <div class="benchmark-card-heading compact">
+            <div>
+              <div class="section-eyebrow">MACHINE PROFILE</div>
+              <h2 id="benchmark-environment-title">Run environment</h2>
+            </div>
+            <span class="environment-mark" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="12" height="12" rx="2"></rect><path d="M7 1.8v2.4m6-2.4v2.4m-6 12v2.4m6-2.4v2.4M1.8 7h2.4m-2.4 6h2.4m12-6h2.4m-2.4 6h2.4"></path></svg></span>
+          </div>
+          <dl class="environment-list">
+            <div><dt>Processor</dt><dd id="hw-cpu">—</dd></div>
+            <div><dt>CPU cores</dt><dd id="hw-cores">—</dd></div>
+            <div><dt>Installed memory</dt><dd id="hw-ram">—</dd></div>
+            <div><dt>Compiler</dt><dd id="hw-compiler">—</dd></div>
+            <div><dt>Optimization</dt><dd id="hw-flags">—</dd></div>
+            <div><dt>Warm-up</dt><dd id="hw-bench-warmup">—</dd></div>
+            <div title="Measured from main() entry until the backend HTTP server is listening. Operating-system process loading and browser page loading are excluded."><dt>Backend ready</dt><dd id="hw-launch">—</dd></div>
+          </dl>
+          <details class="methodology-details">
+            <summary>How timing is measured</summary>
+            <p>Case generation and one warm-up pass are outside the timer. Parallel solve times include worker-pool startup and task dispatch, so overhead can reduce speedup for small workloads. System load can also affect results.</p>
+          </details>
+        </aside>
+      </div>
+
+      <section class="benchmark-table-card" aria-labelledby="benchmark-table-title">
+        <div class="benchmark-card-heading table-heading">
+          <div>
+            <div class="section-eyebrow">MEASUREMENTS</div>
+            <h2 id="benchmark-table-title">Run-by-run results</h2>
+          </div>
+          <span id="bench-table-summary" class="table-summary">Repetition times and derived scaling metrics</span>
+        </div>
+        <div class="data-table-wrapper">
+          <table class="data-table">
+            <thead><tr id="bench-results-head">
+              <th>Worker threads</th><th>Rep 1 (ms)</th><th>Rep 2 (ms)</th><th>Rep 3 (ms)</th><th>Rep 4 (ms)</th><th>Rep 5 (ms)</th><th>Median (ms)</th><th>Speedup</th><th>Efficiency</th>
+            </tr></thead>
+            <tbody id="bench-results-tbody">
+              <tr><td colspan="9" class="empty-results">Run a benchmark to see repetition timings and scaling metrics.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+
+    <!-- VIEW 4: HARDWARE VIEW -->
+    <section id="view-hardware" class="view-container full-width hardware-view">
+      <div class="hardware-dashboard">
+        <div class="hardware-overview-grid">
+          <section class="hardware-topology-card" aria-labelledby="hardware-topology-heading">
+            <header class="hardware-card-header">
+              <div>
+                <div class="section-eyebrow">SYSTEM TOPOLOGY</div>
+                <h2 id="hardware-topology-heading">Host-connected embedded system</h2>
+                <p>Data paths and debug links across the simulated target bench.</p>
+              </div>
+              <span class="hardware-mode-badge"><span class="status-dot"></span>Simulation mode</span>
+            </header>
+                      <div class="hardware-diagram-shell">
+            <svg class="hardware-diagram" viewBox="0 0 860 240" role="img" aria-labelledby="hardware-diagram-title hardware-diagram-desc">
+              <title id="hardware-diagram-title">Host, MCU, FPGA, and JTAG adapter connections</title>
+              <desc id="hardware-diagram-desc">The host communicates with the MCU over USB CDC serial and with the FPGA over an FTDI FIFO. A USB-connected JTAG adapter provides SWD debugging to the MCU and JTAG access to the FPGA. Device power rails and ground references are detailed in the interface matrix.</desc>
+              <defs>
+                <linearGradient id="gradHost" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#51456f"/><stop offset="100%" stop-color="#322b48"/></linearGradient>
+                <linearGradient id="gradMcu" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#23616c"/><stop offset="100%" stop-color="#194756"/></linearGradient>
+                <linearGradient id="gradFpga" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#555b83"/><stop offset="100%" stop-color="#3a4264"/></linearGradient>
+                <linearGradient id="gradJtag" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#9b6726"/><stop offset="100%" stop-color="#70491f"/></linearGradient>
+              </defs>
+
+              <!-- HOST PC -->
+              <rect x="20" y="30" width="160" height="180" rx="8" fill="url(#gradHost)" stroke="#b39cf6" stroke-width="2"/>
+              <text x="100" y="65" fill="#ffffff" font-weight="bold" font-size="14" text-anchor="middle">HOST PC</text>
+              <text x="100" y="85" fill="#ddd3f4" font-size="10" text-anchor="middle">Workbench core</text>
+              <rect x="35" y="105" width="130" height="24" rx="4" fill="rgba(0,0,0,0.3)"/>
+              <text x="100" y="121" fill="#ffffff" font-size="9" text-anchor="middle">USB 2.0 / 3.0 Root Hub</text>
+              <text x="100" y="150" fill="#ddd3f4" font-size="9" text-anchor="middle">Common Host Ground</text>
+              <text x="100" y="165" fill="#ddd3f4" font-size="9" text-anchor="middle">VBUS 5.0V Power Bus</text>
+
+              <!-- USB Bus Cables -->
+              <!-- To MCU -->
+              <path d="M 180 80 L 320 80" stroke="#a78bfa" stroke-width="2" stroke-dasharray="4"/>
+              <text x="250" y="72" fill="#c7b5ff" font-size="9" text-anchor="middle">USB-CDC Serial (115200 8N1)</text>
+
+              <!-- To FPGA -->
+                <path d="M 100 30 L 100 17 L 705 17 L 705 30" stroke="#a6a0c3" stroke-width="2" stroke-dasharray="4" fill="none"/>
+                <text x="455" y="13" fill="#d0c9e3" font-size="9" text-anchor="middle">High-Speed FTDI FIFO</text>
+
+              <!-- To JTAG Adapter -->
+              <path d="M 180 170 L 320 170" stroke="#f0b64f" stroke-width="2" stroke-dasharray="4"/>
+              <text x="250" y="162" fill="#f3c975" font-size="9" text-anchor="middle">USB JTAG Host Link</text>
+
+              <!-- MCU Board -->
+              <rect x="320" y="30" width="200" height="90" rx="8" fill="url(#gradMcu)" stroke="#52c5d3" stroke-width="2"/>
+              <text x="420" y="55" fill="#ffffff" font-weight="bold" font-size="13" text-anchor="middle">MCU (STM32F401)</text>
+              <text x="420" y="72" fill="#b5edf0" font-size="9" text-anchor="middle">ARM Cortex-M4 @ 84MHz</text>
+              <text x="420" y="88" fill="#ffffff" font-size="9" font-family="monospace" text-anchor="middle">Rail: 3.3V Logic | SWD/JTAG Port</text>
+              <text x="420" y="104" fill="#b5edf0" font-size="8" text-anchor="middle">Target Compute Board</text>
+
+              <!-- FPGA Board -->
+              <rect x="580" y="30" width="250" height="180" rx="8" fill="url(#gradFpga)" stroke="#969ed7" stroke-width="2"/>
+              <text x="705" y="55" fill="#ffffff" font-weight="bold" font-size="13" text-anchor="middle">FPGA (Artix-7 XC7A35T)</text>
+              <text x="705" y="72" fill="#d3d7ee" font-size="9" text-anchor="middle">33,280 Logic Cells | Multi-rail Supplies</text>
+              <text x="705" y="90" fill="#ffffff" font-size="9" font-family="monospace" text-anchor="middle">VCCINT: 1.0V | VCCAUX: 1.8V | VCCO: 3.3V</text>
+              <rect x="600" y="105" width="210" height="40" rx="4" fill="rgba(0,0,0,0.3)"/>
+              <text x="705" y="122" fill="#d3d7ee" font-size="9" text-anchor="middle">Level Shifters & JTAG Tap Controller</text>
+              <text x="705" y="138" fill="#c6ccef" font-size="8" text-anchor="middle">Target Programmable Fabric Node</text>
+
+              <!-- JTAG Debug Adapter -->
+              <rect x="320" y="135" width="200" height="75" rx="8" fill="url(#gradJtag)" stroke="#f0b64f" stroke-width="2"/>
+              <text x="420" y="155" fill="#ffffff" font-weight="bold" font-size="12" text-anchor="middle">JTAG DEBUG ADAPTER</text>
+              <text x="420" y="170" fill="#ffe0a1" font-size="9" text-anchor="middle">J-Link / MPSSE Hardware Probe</text>
+              <text x="420" y="185" fill="#ffffff" font-size="8" font-family="monospace" text-anchor="middle">VREF Sensing (1.2V - 3.3V)</text>
+              <text x="420" y="198" fill="#ffe0a1" font-size="8" text-anchor="middle">DEBUG INTERFACE (Not Compute!)</text>
+
+              <!-- Dedicated JTAG Probe Bus between Adapter and Boards -->
+              <!-- To MCU SWD -->
+              <path d="M 420 135 L 420 120" stroke="#f0b64f" stroke-width="2"/>
+              <!-- To FPGA JTAG Header -->
+              <path d="M 520 170 L 580 170" stroke="#f0b64f" stroke-width="2"/>
+              <text x="550" y="162" fill="#f3c975" font-size="8" text-anchor="middle">JTAG</text>
+            </svg>
+          </div>
+            <p class="hardware-diagram-caption">USB data and debug links are separate. Target VREF is a sense input; it does not power the target.</p>
+          </section>
+
+          <aside class="hardware-context-card" aria-labelledby="hardware-context-heading">
+            <div class="section-eyebrow">RUNTIME ENVIRONMENT</div>
+            <h2 id="hardware-context-heading">Simulation workspace</h2>
+            <div class="hardware-runtime-state"><span class="status-dot"></span><span><strong>C++ mock adapters</strong><small>Local device simulator</small></span></div>
+            <p>Discovery, telemetry, timeout injection, and recovery are served by deterministic adapters.</p>
+            <dl class="hardware-context-list">
+              <div><dt>Configured nodes</dt><dd>03</dd></div>
+              <div><dt>Telemetry interval</dt><dd>1.2 s</dd></div>
+              <div><dt>Physical USB access</dt><dd class="context-unavailable">Unavailable</dd></div>
+            </dl>
+            <div class="hardware-context-foot"><span class="context-foot-mark">i</span><span>This workspace does not enumerate or control physical boards.</span></div>
+          </aside>
+        </div>
+
+        <section class="device-inventory" aria-labelledby="hardware-devices-heading">
+          <header class="hardware-section-heading">
+            <div>
+              <div class="section-eyebrow">DEVICE MANAGER</div>
+              <h2 id="hardware-devices-heading">Target bench</h2>
+              <p>Discover a simulated device, connect, and inspect its live adapter stream.</p>
+            </div>
+            <span class="inventory-count"><span class="status-dot"></span>3 configured devices</span>
+          </header>
+          <div class="device-grid">
+            <article class="device-card" id="card-mcu">
+              <div class="device-card-header">
+                <span class="device-mark device-mark-mcu" aria-hidden="true">μC</span>
+                <div class="device-heading-copy"><h3>STM32F401</h3><p>MCU target · Cortex-M4F</p></div>
+                <span class="device-badge disconnected" id="badge-mcu">DISCONNECTED</span>
+              </div>
+              <div class="device-spec-row"><span><small>LOGIC</small>3.3 V</span><span><small>HOST LINK</small>USB-CDC</span><span><small>DEBUG</small>SWD</span></div>
+              <div class="device-actions">
+                <button class="btn btn-sm" id="btn-discover-mcu" type="button">Discover</button>
+                <button class="btn btn-sm btn-primary" id="btn-connect-mcu" type="button" disabled>Connect</button>
+                <button class="btn btn-sm device-capability-btn" id="btn-caps-mcu" type="button">Capabilities</button>
+              </div>
+              <details class="device-advanced"><summary>Fault injection &amp; recovery</summary><div class="device-advanced-actions"><button class="btn btn-sm btn-danger" id="btn-fail-mcu" type="button" disabled>Inject timeout</button><button class="btn btn-sm" id="btn-recover-mcu" type="button" disabled>Auto-recover</button></div></details>
+              <div class="device-console-heading"><span>Adapter output</span><span class="console-live-mark"><i></i>MOCK LOG</span></div>
+              <div class="telemetry-box" id="telemetry-mcu">No session output. Discover the adapter to begin.</div>
+            </article>
+            <article class="device-card" id="card-fpga">
+              <div class="device-card-header">
+                <span class="device-mark device-mark-fpga" aria-hidden="true">FP</span>
+                <div class="device-heading-copy"><h3>Artix-7 FPGA</h3><p>XC7A35T · Programmable fabric</p></div>
+                <span class="device-badge disconnected" id="badge-fpga">DISCONNECTED</span>
+              </div>
+              <div class="device-spec-row"><span><small>RAILS</small>1.0 / 1.8 / 3.3 V</span><span><small>HOST LINK</small>FTDI FIFO</span><span><small>DEBUG</small>JTAG</span></div>
+              <div class="device-actions">
+                <button class="btn btn-sm" id="btn-discover-fpga" type="button">Discover</button>
+                <button class="btn btn-sm btn-primary" id="btn-connect-fpga" type="button" disabled>Connect</button>
+                <button class="btn btn-sm device-capability-btn" id="btn-caps-fpga" type="button">Capabilities</button>
+              </div>
+              <details class="device-advanced"><summary>Fault injection &amp; recovery</summary><div class="device-advanced-actions"><button class="btn btn-sm btn-danger" id="btn-fail-fpga" type="button" disabled>Inject timeout</button><button class="btn btn-sm" id="btn-recover-fpga" type="button" disabled>Auto-recover</button></div></details>
+              <div class="device-console-heading"><span>Adapter output</span><span class="console-live-mark"><i></i>MOCK LOG</span></div>
+              <div class="telemetry-box" id="telemetry-fpga">No session output. Discover the adapter to begin.</div>
+            </article>
+            <article class="device-card" id="card-jtag">
+              <div class="device-card-header">
+                <span class="device-mark device-mark-jtag" aria-hidden="true">J</span>
+                <div class="device-heading-copy"><h3>JTAG debug adapter</h3><p>J-Link / MPSSE · Debug master</p></div>
+                <span class="device-badge disconnected" id="badge-jtag">DISCONNECTED</span>
+              </div>
+              <div class="device-spec-row"><span><small>VTREF</small>1.2–3.3 V</span><span><small>HOST LINK</small>USB 2.0</span><span><small>ROLE</small>Probe</span></div>
+              <div class="device-actions">
+                <button class="btn btn-sm" id="btn-discover-jtag" type="button">Discover</button>
+                <button class="btn btn-sm btn-primary" id="btn-connect-jtag" type="button" disabled>Connect</button>
+                <button class="btn btn-sm device-capability-btn" id="btn-caps-jtag" type="button">Capabilities</button>
+              </div>
+              <details class="device-advanced"><summary>Fault injection &amp; recovery</summary><div class="device-advanced-actions"><button class="btn btn-sm btn-danger" id="btn-fail-jtag" type="button" disabled>Inject timeout</button><button class="btn btn-sm" id="btn-recover-jtag" type="button" disabled>Auto-recover</button></div></details>
+              <div class="device-console-heading"><span>Adapter output</span><span class="console-live-mark"><i></i>MOCK LOG</span></div>
+              <div class="telemetry-box" id="telemetry-jtag">No session output. Discover the adapter to begin.</div>
+            </article>
+          </div>
+        </section>
+
+        <details class="hardware-reference-section">
+          <summary><span><strong>Interface specification</strong><small>Power, voltage domains, host links, and assumed debug connectors</small></span><span class="reference-chevron" aria-hidden="true">⌄</span></summary>
+          <div class="hardware-reference-content">
+            <div class="hardware-electrical-note" role="note"><strong>Electrical distinction</strong><span>A JTAG adapter is a debug interface that masters the IEEE 1149.1 TAP state machine; it is not a compute board. Connector families, voltage domains, and protocols vary. Confirm target VTREF and compatible level translation before attaching hardware: a voltage mismatch can damage target I/O.</span></div>
+                      <div class="hardware-matrix-wrap">
+            <table class="data-table hardware-matrix">
+              <thead>
+                <tr>
+                  <th>Device and role</th>
+                  <th>Power and regulation</th>
+                  <th>Logic, level shifting, and ground</th>
+                  <th>Host interface</th>
+                  <th>Debug connector and assumed pinout</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong class="matrix-device matrix-mcu">STM32F401 MCU</strong><small>Target compute node · Cortex-M4F @ 84 MHz</small></td>
+                  <td>5V USB VBUS <span class="matrix-arrow">→</span> 3.3V LDO<small>Board ground referenced to host USB shield</small></td>
+                  <td>3.3V LVCMOS · direct UART, no level shifter<small>SWD target: SWCLK, bidirectional SWDIO, nRST, GND</small></td>
+                  <td>USB-CDC virtual COM<small>115200 baud · 8N1</small></td>
+                  <td>10-pin 0.05 in Cortex SWD header<small>Target is the debug slave; probe drives SWCLK and nRST</small></td>
+                </tr>
+                <tr>
+                  <td><strong class="matrix-device matrix-fpga">Artix-7 XC7A35T</strong><small>Target programmable accelerator · 33,280 logic cells</small></td>
+                  <td>5V USB or external 5V / 2A<small>PMIC generates 1.0V core, 1.8V auxiliary, and 3.3V I/O rails</small></td>
+                  <td>1.8V and 3.3V I/O banks · TXS0108E/TXB0104 translation where interfaces cross domains<small>Split digital/analog ground with a star tie to host shield</small></td>
+                  <td>FTDI FT2232H high-speed FIFO<small>Channel A · up to 30 MB/s (interface capability)</small></td>
+                  <td>14-pin 2.00 mm Xilinx JTAG header<small>Target TAP: TCK/TMS/TDI in, TDO out; VTREF supplied by target</small></td>
+                </tr>
+                <tr>
+                  <td><strong class="matrix-device matrix-jtag">JTAG debug adapter</strong><small>Dedicated debug master · not a compute node</small></td>
+                  <td>5V from host USB<small>Internal 3.3V probe logic; target is separately powered</small></td>
+                  <td>VTREF auto-sense from 1.2V to 3.3V · integrated active level translators<small>Probe ground joins target ground on JTAG pins 4/6/8/10</small></td>
+                  <td>USB 2.0 high-speed bulk endpoint<small>WinUSB / libusb class driver</small></td>
+                  <td>20-pin 0.10 in probe header with target breakout<small>Master drives TCK/TMS/TDI/nSRST; samples TDO/VTREF</small></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+            <p class="hardware-diagram-caption">These signal sets and connector families are design assumptions. Confirm numbered pin assignments against the exact board revision and debug-header documentation.</p>
+          </div>
+        </details>
+
+        <details class="hardware-reference-section">
+          <summary><span><strong>Bring-up sequence &amp; simulator limits</strong><small>Practical checks before connecting a physical target</small></span><span class="reference-chevron" aria-hidden="true">⌄</span></summary>
+                      <div class="hardware-plan-content">
+              <div>
+                <h3>Bring-up sequence</h3>
+                <ol>
+                  <li>Confirm the exact board revision, connector orientation, pinout, and permitted power source from its manufacturer documentation.</li>
+                  <li>Keep target power independent from the debug probe. Verify regulated rails and the intended ground reference before attaching signal cables.</li>
+                  <li>Match each interface to its voltage domain. Use a translator rated for the bus direction, speed, and target I/O; verify the probe reads a valid target <code>VTREF</code>.</li>
+                  <li>Use the correct MCU SWD or FPGA JTAG cable. Check pin one and signal ownership before powering the target or starting a debug session.</li>
+                  <li>Bring up one link at a time, confirm discovery and a plausible telemetry response, then test recovery with a controlled timeout.</li>
+                </ol>
+              </div>
+              <div class="hardware-limit-note">
+                <h3>What this prototype does not validate</h3>
+                <p>Adapters are deterministic C++ mocks. The page does not enumerate USB hardware, measure signal integrity, enforce real electrical limits, run firmware, or program an FPGA. Treat the diagram as a reference architecture, not a wiring drawing. Verify every connection against the documentation for the exact board and probe before physical integration.</p>
+              </div>
+            </div>
+        </details>
+      </div>
+    </section>
+
+
+  </main>
+
+    </div>
+  </div>
+
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,9 @@
+solid corrupt_specimen
+  facet normal 0.0 0.0 1.0
+    outer loop
+      vertex 0.0 NaN 0.0
+      vertex 1.0 0.0 Inf
+      vertex 0.0 1.0 0.0
+    endloop
+  # Premature EOF without endfacet or endsolid
+

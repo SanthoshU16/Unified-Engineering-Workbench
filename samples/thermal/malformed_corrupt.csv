@@ -1,0 +1,7 @@
+# Corrupted synthetic ANSYS-style CSV
+node_id,x_m,y_m,z_m,temperature_C
+1,0.0,0.0,0.0,105.2
+2,0.01,0.0,0.0,NaN
+3,0.02,0.0,0.0
+# Missing columns and non-finite values above
+

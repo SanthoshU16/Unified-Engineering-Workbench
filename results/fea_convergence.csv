@@ -1,0 +1,31 @@
+# Unified Engineering Workbench - 1D Thermal FEA Results
+# Parameters: L=1 m, A=0.0001 m2, k=10 W/(m K), q=10000 W/m3, T0=100 C, TL=20 C, N=10
+# mesh_profile
+type,x_m,T_fea_C,T_exact_C,absolute_error_C
+node,0,100,100,0
+node,0.1,137,137,0
+node,0.2,164,164,2.842170943e-14
+node,0.3,181,181,0
+node,0.4,188,188,2.842170943e-14
+node,0.5,185,185,2.842170943e-14
+node,0.6,172,172,2.842170943e-14
+node,0.7,149,149,0
+node,0.8,116,116,1.421085472e-14
+node,0.9,73,73,0
+node,1,20,20,0
+midpoint,0.05,118.5,119.75,1.25
+midpoint,0.15,150.5,151.75,1.25
+midpoint,0.25,172.5,173.75,1.25
+midpoint,0.35,184.5,185.75,1.25
+midpoint,0.45,186.5,187.75,1.25
+midpoint,0.55,178.5,179.75,1.25
+midpoint,0.65,160.5,161.75,1.25
+midpoint,0.75,132.5,133.75,1.25
+midpoint,0.85,94.5,95.75,1.25
+midpoint,0.95,46.5,47.75,1.25
+# mesh_convergence
+elements_N,element_length_h_m,max_midpoint_error_C,theoretical_error_bound_C,observed_convergence_rate
+10,0.1,1.25,1.25,0
+20,0.05,0.3125,0.3125,2
+40,0.025,0.078125,0.078125,2
+80,0.0125,0.01953125,0.01953125,2
