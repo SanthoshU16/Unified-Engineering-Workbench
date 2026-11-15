@@ -1,46 +1,64 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="650" viewBox="0 0 1120 650">
-<defs><linearGradient id="bar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#dfb27d"/><stop offset="1" stop-color="#9a603b"/></linearGradient></defs>
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="700" viewBox="0 0 1120 700">
+<defs>
+  <linearGradient id="bar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#dfb27d"/><stop offset="1" stop-color="#9a603b"/></linearGradient>
+  <linearGradient id="bar2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7ec8a4"/><stop offset="1" stop-color="#3a7a5a"/></linearGradient>
+  <linearGradient id="bar4" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7ab8e0"/><stop offset="1" stop-color="#2e6ea0"/></linearGradient>
+</defs>
 <rect width="100%" height="100%" fill="#111310"/>
-<rect x="24" y="22" width="1072" height="606" rx="16" fill="#191a16" stroke="#39372f"/>
-<text x="56" y="65" fill="#f1eee6" font-size="22" font-weight="700" font-family="Inter,system-ui,sans-serif">Multicore benchmark</text>
-<text x="56" y="94" fill="#aaa69c" font-size="13" font-family="Inter,system-ui,sans-serif">20,000 thermal cases · mesh N = 200 · Apple M2 · 16 GiB RAM · Clang 21 · -O3</text>
-<rect x="775" y="48" width="14" height="14" rx="3" fill="url(#bar)"/><text x="797" y="60" fill="#c9c2b4" font-size="12" font-family="Inter,system-ui,sans-serif">Median time</text>
-<circle cx="915" cy="55" r="6" fill="#b5a263"/><text x="930" y="60" fill="#c9c2b4" font-size="12" font-family="Inter,system-ui,sans-serif">Speedup</text>
-<rect x="110" y="150" width="900" height="365" rx="8" fill="#141510" stroke="#34332c"/>
-<line x1="110" y1="515.0" x2="1010" y2="515.0" stroke="#302f29" stroke-dasharray="3 5"/>
-<text x="96" y="519.0" text-anchor="end" fill="#aaa69c" font-size="12" font-family="ui-monospace,monospace">0</text>
-<line x1="110" y1="423.8" x2="1010" y2="423.8" stroke="#302f29" stroke-dasharray="3 5"/>
-<text x="96" y="427.8" text-anchor="end" fill="#aaa69c" font-size="12" font-family="ui-monospace,monospace">15</text>
-<line x1="110" y1="332.5" x2="1010" y2="332.5" stroke="#302f29" stroke-dasharray="3 5"/>
-<text x="96" y="336.5" text-anchor="end" fill="#aaa69c" font-size="12" font-family="ui-monospace,monospace">31</text>
-<line x1="110" y1="241.2" x2="1010" y2="241.2" stroke="#302f29" stroke-dasharray="3 5"/>
-<text x="96" y="245.2" text-anchor="end" fill="#aaa69c" font-size="12" font-family="ui-monospace,monospace">46</text>
-<line x1="110" y1="150.0" x2="1010" y2="150.0" stroke="#302f29" stroke-dasharray="3 5"/>
-<text x="96" y="154.0" text-anchor="end" fill="#aaa69c" font-size="12" font-family="ui-monospace,monospace">62</text>
-<text x="1024" y="519.0" fill="#b5a263" font-size="12" font-family="ui-monospace,monospace">0.0×</text>
-<text x="1024" y="427.8" fill="#b5a263" font-size="12" font-family="ui-monospace,monospace">1.0×</text>
-<text x="1024" y="336.5" fill="#b5a263" font-size="12" font-family="ui-monospace,monospace">2.0×</text>
-<text x="1024" y="245.2" fill="#b5a263" font-size="12" font-family="ui-monospace,monospace">3.0×</text>
-<text x="1024" y="154.0" fill="#b5a263" font-size="12" font-family="ui-monospace,monospace">4.0×</text>
-<rect x="212.0" y="215.0" width="96" height="300.0" rx="8" fill="url(#bar)"/>
-<text x="260" y="203.0" text-anchor="middle" fill="#f1eee6" font-size="14" font-weight="700" font-family="ui-monospace,monospace">50.716 ms</text>
-<text x="260" y="544" text-anchor="middle" fill="#d0cbc0" font-size="13" font-family="Inter,system-ui,sans-serif">1 worker</text>
-<rect x="512.0" y="329.0" width="96" height="186.0" rx="8" fill="url(#bar)"/>
-<text x="560" y="317.0" text-anchor="middle" fill="#f1eee6" font-size="14" font-weight="700" font-family="ui-monospace,monospace">31.447 ms</text>
-<text x="560" y="544" text-anchor="middle" fill="#d0cbc0" font-size="13" font-family="Inter,system-ui,sans-serif">2 workers</text>
-<rect x="812.0" y="402.8" width="96" height="112.2" rx="8" fill="url(#bar)"/>
-<text x="860" y="390.8" text-anchor="middle" fill="#f1eee6" font-size="14" font-weight="700" font-family="ui-monospace,monospace">18.971 ms</text>
-<text x="860" y="544" text-anchor="middle" fill="#d0cbc0" font-size="13" font-family="Inter,system-ui,sans-serif">4 workers</text>
-<line x1="260" y1="423.8" x2="560" y2="367.8" stroke="#b5a263" stroke-width="3"/>
-<line x1="560" y1="367.8" x2="860" y2="271.1" stroke="#b5a263" stroke-width="3"/>
-<circle cx="260" cy="423.8" r="7" fill="#b5a263" stroke="#191a16" stroke-width="3"/>
-<text x="260" y="405.8" text-anchor="middle" fill="#d6c889" font-size="12" font-weight="700" font-family="ui-monospace,monospace">1.00× · 100.0%</text>
-<circle cx="560" cy="366.6" r="7" fill="#b5a263" stroke="#191a16" stroke-width="3"/>
-<text x="560" y="349.8" text-anchor="middle" fill="#d6c889" font-size="12" font-weight="700" font-family="ui-monospace,monospace">1.61× · 80.6%</text>
-<circle cx="860" cy="271.1" r="7" fill="#b5a263" stroke="#191a16" stroke-width="3"/>
-<text x="860" y="253.1" text-anchor="middle" fill="#d6c889" font-size="12" font-weight="700" font-family="ui-monospace,monospace">2.67× · 66.8%</text>
-<text x="560.0" y="577" text-anchor="middle" fill="#aaa69c" font-size="12" font-family="Inter,system-ui,sans-serif">Worker count</text>
-<text x="37" y="332.5" text-anchor="middle" fill="#aaa69c" font-size="12" font-family="Inter,system-ui,sans-serif" transform="rotate(-90 37 332.5)">Median execution time (ms)</text>
-<text x="1080" y="332.5" text-anchor="middle" fill="#b5a263" font-size="12" font-family="Inter,system-ui,sans-serif" transform="rotate(90 1080 332.5)">Speedup vs serial</text>
-<text x="56" y="608" fill="#aaa69c" font-size="11" font-family="Inter,system-ui,sans-serif">Five repetitions; one untimed warm-up per worker count. Parallel time includes pool startup and dispatch; speedup = median serial / median parallel.</text>
+<rect x="24" y="22" width="1072" height="656" rx="16" fill="#191a16" stroke="#39372f"/>
+
+<!-- Title -->
+<text x="56" y="65" fill="#f1eee6" font-size="22" font-weight="700" font-family="Inter,system-ui,sans-serif">Multicore Benchmark — Execution Time &amp; Speedup</text>
+<text x="56" y="94" fill="#aaa69c" font-size="13" font-family="Inter,system-ui,sans-serif">2,000 thermal cases · mesh N = 100 · seed 42 · Apple M2 · 16 GiB · Clang 21 · -O3 · 5 reps · 1 warm-up pass</text>
+
+<!-- Legend -->
+<rect x="750" y="48" width="14" height="14" rx="3" fill="url(#bar)"/><text x="772" y="60" fill="#c9c2b4" font-size="12" font-family="Inter,system-ui,sans-serif">1 worker</text>
+<rect x="840" y="48" width="14" height="14" rx="3" fill="url(#bar2)"/><text x="862" y="60" fill="#c9c2b4" font-size="12" font-family="Inter,system-ui,sans-serif">2 workers</text>
+<rect x="940" y="48" width="14" height="14" rx="3" fill="url(#bar4)"/><text x="962" y="60" fill="#c9c2b4" font-size="12" font-family="Inter,system-ui,sans-serif">4 workers</text>
+
+<!-- Chart area -->
+<rect x="110" y="150" width="900" height="390" rx="8" fill="#141510" stroke="#34332c"/>
+
+<!-- Y-axis gridlines (time axis, max ~6ms) -->
+<line x1="110" y1="540" x2="1010" y2="540" stroke="#302f29" stroke-dasharray="3 5"/>
+<text x="96" y="544" text-anchor="end" fill="#aaa69c" font-size="12" font-family="ui-monospace,monospace">0</text>
+<line x1="110" y1="462" x2="1010" y2="462" stroke="#302f29" stroke-dasharray="3 5"/>
+<text x="96" y="466" text-anchor="end" fill="#aaa69c" font-size="12" font-family="ui-monospace,monospace">1.3</text>
+<line x1="110" y1="384" x2="1010" y2="384" stroke="#302f29" stroke-dasharray="3 5"/>
+<text x="96" y="388" text-anchor="end" fill="#aaa69c" font-size="12" font-family="ui-monospace,monospace">2.6</text>
+<line x1="110" y1="306" x2="1010" y2="306" stroke="#302f29" stroke-dasharray="3 5"/>
+<text x="96" y="310" text-anchor="end" fill="#aaa69c" font-size="12" font-family="ui-monospace,sans-serif">3.9</text>
+<line x1="110" y1="228" x2="1010" y2="228" stroke="#302f29" stroke-dasharray="3 5"/>
+<text x="96" y="232" text-anchor="end" fill="#aaa69c" font-size="12" font-family="ui-monospace,monospace">5.2</text>
+<line x1="110" y1="150" x2="1010" y2="150" stroke="#302f29" stroke-dasharray="3 5"/>
+<text x="96" y="154" text-anchor="end" fill="#aaa69c" font-size="12" font-family="ui-monospace,monospace">6.5</text>
+
+<!-- Y-axis label -->
+<text x="30" y="350" fill="#aaa69c" font-size="13" font-family="Inter,system-ui,sans-serif" transform="rotate(-90,30,350)">Median solve time (ms)</text>
+
+<!-- 1 worker bar: 5.22ms → height = (5.22/6.5)*390 = 313 → y = 540-313 = 227 -->
+<rect x="200" y="227" width="90" height="313" rx="6" fill="url(#bar)"/>
+<text x="245" y="216" text-anchor="middle" fill="#f1eee6" font-size="14" font-weight="700" font-family="ui-monospace,monospace">5.22 ms</text>
+<text x="245" y="572" text-anchor="middle" fill="#d0cbc0" font-size="13" font-family="Inter,system-ui,sans-serif">1 worker</text>
+<text x="245" y="588" text-anchor="middle" fill="#aaa69c" font-size="11" font-family="Inter,system-ui,sans-serif">1.00× speedup</text>
+
+<!-- 2 workers bar: 2.52ms → height = (2.52/6.5)*390 = 151 → y = 540-151 = 389 -->
+<rect x="490" y="389" width="90" height="151" rx="6" fill="url(#bar2)"/>
+<text x="535" y="378" text-anchor="middle" fill="#f1eee6" font-size="14" font-weight="700" font-family="ui-monospace,monospace">2.52 ms</text>
+<text x="535" y="572" text-anchor="middle" fill="#d0cbc0" font-size="13" font-family="Inter,system-ui,sans-serif">2 workers</text>
+<text x="535" y="588" text-anchor="middle" fill="#7ec8a4" font-size="11" font-weight="700" font-family="Inter,system-ui,sans-serif">2.07× speedup</text>
+
+<!-- 4 workers bar: 1.33ms → height = (1.33/6.5)*390 = 80 → y = 540-80 = 460 -->
+<rect x="780" y="460" width="90" height="80" rx="6" fill="url(#bar4)"/>
+<text x="825" y="449" text-anchor="middle" fill="#f1eee6" font-size="14" font-weight="700" font-family="ui-monospace,monospace">1.33 ms</text>
+<text x="825" y="572" text-anchor="middle" fill="#d0cbc0" font-size="13" font-family="Inter,system-ui,sans-serif">4 workers</text>
+<text x="825" y="588" text-anchor="middle" fill="#7ab8e0" font-size="11" font-weight="700" font-family="Inter,system-ui,sans-serif">3.92× speedup</text>
+
+<!-- Verification badge -->
+<rect x="750" y="610" width="300" height="38" rx="8" fill="#1a2e1a" stroke="#3a7a5a"/>
+<text x="900" y="634" text-anchor="middle" fill="#7ec8a4" font-size="13" font-weight="700" font-family="Inter,system-ui,sans-serif">✓ Verification PASS · ΔT_max = 0.00e+0 °C ≤ 1e-8</text>
+
+<!-- Efficiency table -->
+<rect x="56" y="610" width="640" height="38" rx="8" fill="#1a1f2e" stroke="#2e3a5a"/>
+<text x="76" y="634" fill="#aaa69c" font-size="12" font-family="ui-monospace,monospace">1W: η=100.0%    2W: η=103.6%    4W: η=98.0%    Peak speedup: 3.92× at 4 workers</text>
 </svg>

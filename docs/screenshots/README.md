@@ -13,3 +13,4 @@ All views are from commit `7514553` on branch `main`.
 | 6 | `06_performance_lab_execution_time.jpg` | **Performance — Execution Time** | Benchmark: 2,000 cases, N=100 mesh, seed 42, 5 reps — fastest median 1.33 ms at 4 workers, peak speedup 3.92×, verification PASS (ΔT=0) |
 | 7 | `07_performance_lab_speedup_chart.jpg` | **Performance — Speedup vs Ideal** | Measured vs. ideal linear speedup bar chart: 1W→1.00×, 2W→2.07×, 4W→3.92×; measurements table with all 5 repetitions visible |
 | 8 | `08_hardware_workbench_block_diagram.jpg` | **Hardware — Block Diagram** | System topology diagram: Host PC ↔ STM32F401 (USB-CDC), Artix-7 FPGA (FTDI FIFO), JTAG Debug Adapter; 3 C++ mock adapters in simulation mode |
+

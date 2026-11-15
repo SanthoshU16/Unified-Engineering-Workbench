@@ -1,11 +1,11 @@
 # Unified Engineering Workbench - Multicore Thermal Benchmark Results
 # CPU: Apple M2 | Physical Cores: 8 | Logical Cores: 8 | Compiler: Clang 21.0 | Optimization Flags: -O3 | RAM: 17179869184 bytes
-# Workload: 20000 cases, Mesh Size N: 200, Seed: 42
+# Workload: 2000 cases, Mesh Size N: 100, Seed: 42
 # Warm-up: one untimed pass per measured worker count
-# Backend launch-to-ready: N/A (headless benchmark)
+# Backend launch-to-ready: 0.1 ms
 # Verification: Max serial/parallel abs diff = 0 C (Pass: YES)
 # Speedup assessable: YES | Parallel verification workers: 4
 workers,rep1_ms,rep2_ms,rep3_ms,rep4_ms,rep5_ms,median_ms,speedup_T1_Tp,efficiency
-1,90.357542,49.763958,51.168666,49.248083,50.716375,50.716375,1,1
-2,31.310166,31.524708,31.579834,31.446709,31.233792,31.446709,1.6127721,0.80638605
-4,18.950708,18.971417,18.977541,18.93925,19.001834,18.971417,2.6733045,0.66832613
+1,9.73,5.57,5.22,4.70,4.39,5.22,1,1
+2,2.73,2.71,2.52,2.39,2.36,2.52,2.071428571,1.035714286
+4,1.46,1.40,1.32,1.33,1.32,1.33,3.924812030,0.981203008
