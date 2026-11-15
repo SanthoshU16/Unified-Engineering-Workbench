@@ -3,7 +3,7 @@
 **PASS Science Works | R&D Internship Assessment 2026–2027**  
 **Document ID:** UEW-VCS-001  
 **Repository:** `Unified-Engineering-Workbench`  
-**Remote Target:** `git@github.com:SanthoshU16/Unified-Engineering-Workbench.git`  
+**Remote Target:** `https://github.com/SanthoshU16/Unified-Engineering-Workbench.git`  
 **Active Branch:** `main` (Synchronized with `origin/main`)  
 
 ---
@@ -11,7 +11,9 @@
 ## 1. Commit Topology & History
 
 ```text
-* 0d0e13b (HEAD -> main, origin/main) docs: update AI log, walkthrough, and test counts
+* b5fcd08 (HEAD -> main, origin/main) feat(deploy): add multi-stage Dockerfile and render.yaml for Render deployment
+* 5132661 docs: synchronize git log and update verified git bundle
+* 0d0e13b docs: update AI log, walkthrough, and test counts
 * 6756554 feat: complete Unified Engineering Workbench R&D assessment (Tasks A-F)
 ```
 
@@ -65,5 +67,5 @@ docs/workbench_repo.bundle is okay
 ## 4. Verification & Submission Status
 
 - **Working Directory:** Clean (`git status` reports nothing to commit).
-- **Remote Status:** Up to date with `origin/main` (`git@github.com:SanthoshU16/Unified-Engineering-Workbench.git`).
+- **Remote Status:** Up to date with `origin/main` (`https://github.com/SanthoshU16/Unified-Engineering-Workbench.git`).
 - **Archive Status:** `CandidateID_Workbench.zip` contains all source files, pre-run results, documentation, and the verified Git bundle.

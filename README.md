@@ -14,6 +14,12 @@
 
 The application has no third-party runtime libraries. A source build requires **CMake 3.20+** and a **C++17 compiler**.
 
+### Clone Repository:
+```bash
+git clone https://github.com/SanthoshU16/Unified-Engineering-Workbench.git
+cd Unified-Engineering-Workbench
+```
+
 ### Windows 11 x64
 The packaged application should include `Launch.exe` and `dist/windows-x64/workbench_server.exe`; double-click `Launch.exe` for the self-contained route. `Launch.bat` uses that package when present. In a source checkout it rebuilds the backend with CMake before launch, so recent source changes are not hidden behind an old executable.
 

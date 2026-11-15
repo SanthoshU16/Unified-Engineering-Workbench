@@ -47,3 +47,4 @@ EXPOSE 10000
 
 # Execute server without opening desktop browser
 CMD ["./workbench_server", "--no-browser", "--web-root", "."]
+
