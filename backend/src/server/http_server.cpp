@@ -479,8 +479,8 @@ HttpResponse HttpServer::handle_api_ansys_parse(const std::string& body) {
 
 HttpResponse HttpServer::handle_api_benchmark_run(const std::string& body) {
     BenchmarkConfig cfg;
-    cfg.num_cases = get_json_int(body, "num_cases", 20000);
-    cfg.mesh_size = get_json_int(body, "mesh_size", 200);
+    cfg.num_cases = get_json_int(body, "num_cases", 2000);
+    cfg.mesh_size = get_json_int(body, "mesh_size", 100);
     cfg.seed = static_cast<uint64_t>(get_json_double(body, "seed", 42.0));
     cfg.repetitions = get_json_int(body, "repetitions", 5);
     if (cfg.repetitions < 1 || cfg.repetitions > 50) {

@@ -58,7 +58,7 @@ bool Thermal1DSolver::solve_tridiagonal(
     return true;
 }
 
-FEAResult Thermal1DSolver::solve(const FEAConfig& cfg) {
+FEAResult Thermal1DSolver::solve(const FEAConfig& cfg, bool compute_detailed_evals) {
     FEAResult res;
     res.config = cfg;
     res.success = false;
@@ -95,12 +95,14 @@ FEAResult Thermal1DSolver::solve(const FEAConfig& cfg) {
     res.h = h;
 
     const int num_nodes = N + 1;
-    res.node_coords.resize(num_nodes);
-    for (int i = 0; i < num_nodes; ++i) {
-        res.node_coords[i] = static_cast<double>(i) * h;
+    if (compute_detailed_evals) {
+        res.node_coords.resize(num_nodes);
+        for (int i = 0; i < num_nodes; ++i) {
+            res.node_coords[i] = static_cast<double>(i) * h;
+        }
+        // Snap final node coordinate to exactly L to prevent floating precision drift
+        res.node_coords.back() = cfg.L;
     }
-    // Snap final node coordinate to exactly L to prevent floating precision drift
-    res.node_coords.back() = cfg.L;
 
     res.nodal_temperatures.resize(num_nodes, 0.0);
     res.nodal_temperatures[0] = cfg.T0;
@@ -135,28 +137,30 @@ FEAResult Thermal1DSolver::solve(const FEAConfig& cfg) {
         }
     }
 
-    // Midpoint evaluations and error calculation
-    res.midpoint_evals.resize(N);
-    double max_mid_err = 0.0;
-    for (int e = 0; e < N; ++e) {
-        double x_mid = 0.5 * (res.node_coords[e] + res.node_coords[e + 1]);
-        double T_fea_mid = 0.5 * (res.nodal_temperatures[e] + res.nodal_temperatures[e + 1]);
-        double T_ex_mid = exact_temperature(x_mid, cfg);
-        double err = std::abs(T_fea_mid - T_ex_mid);
+    if (compute_detailed_evals) {
+        // Midpoint evaluations and error calculation
+        res.midpoint_evals.resize(N);
+        double max_mid_err = 0.0;
+        for (int e = 0; e < N; ++e) {
+            double x_mid = 0.5 * (res.node_coords[e] + res.node_coords[e + 1]);
+            double T_fea_mid = 0.5 * (res.nodal_temperatures[e] + res.nodal_temperatures[e + 1]);
+            double T_ex_mid = exact_temperature(x_mid, cfg);
+            double err = std::abs(T_fea_mid - T_ex_mid);
 
-        res.midpoint_evals[e] = {x_mid, T_fea_mid, T_ex_mid, err};
-        max_mid_err = std::max(max_mid_err, err);
-    }
-    res.max_midpoint_error = max_mid_err;
+            res.midpoint_evals[e] = {x_mid, T_fea_mid, T_ex_mid, err};
+            max_mid_err = std::max(max_mid_err, err);
+        }
+        res.max_midpoint_error = max_mid_err;
 
-    // Nodal error calculation (verifies superconvergence)
-    double max_node_err = 0.0;
-    for (int i = 0; i < num_nodes; ++i) {
-        double T_ex_node = exact_temperature(res.node_coords[i], cfg);
-        double err = std::abs(res.nodal_temperatures[i] - T_ex_node);
-        max_node_err = std::max(max_node_err, err);
+        // Nodal error calculation (verifies superconvergence)
+        double max_node_err = 0.0;
+        for (int i = 0; i < num_nodes; ++i) {
+            double T_ex_node = exact_temperature(res.node_coords[i], cfg);
+            double err = std::abs(res.nodal_temperatures[i] - T_ex_node);
+            max_node_err = std::max(max_node_err, err);
+        }
+        res.max_nodal_error = max_node_err;
     }
-    res.max_nodal_error = max_node_err;
 
     res.success = true;
     return res;

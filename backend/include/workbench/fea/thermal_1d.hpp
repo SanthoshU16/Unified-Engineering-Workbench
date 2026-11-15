@@ -9,8 +9,10 @@ namespace fea {
 
 class Thermal1DSolver {
 public:
-    // Solve the 1D steady-state thermal FEA problem for the given configuration
-    static FEAResult solve(const FEAConfig& config);
+    // Solve the 1D steady-state thermal FEA problem for the given configuration.
+    // If compute_detailed_evals is false, midpoint evaluations and node coordinate vectors
+    // are skipped to save heap allocation overhead and memory during high-throughput batch solves.
+    static FEAResult solve(const FEAConfig& config, bool compute_detailed_evals = true);
 
     // Compute exact analytical temperature at position x:
     // T_exact(x) = T0 + (TL - T0)*x/L + [q/(2k)]*x*(L - x)

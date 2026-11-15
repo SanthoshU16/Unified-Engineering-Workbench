@@ -40,7 +40,7 @@ std::vector<FEAConfig> BatchThermalSolver::generate_batch(int num_cases, int mes
 std::vector<FEAResult> BatchThermalSolver::solve_serial(const std::vector<FEAConfig>& cases) {
     std::vector<FEAResult> results(cases.size());
     for (size_t i = 0; i < cases.size(); ++i) {
-        results[i] = Thermal1DSolver::solve(cases[i]);
+        results[i] = Thermal1DSolver::solve(cases[i], false);
     }
     return results;
 }
@@ -61,7 +61,7 @@ std::vector<FEAResult> BatchThermalSolver::solve_parallel(const std::vector<FEAC
         size_t end = std::min(start + chunk_size, total_cases);
         pool.enqueue([&cases, &results, start, end]() {
             for (size_t i = start; i < end; ++i) {
-                results[i] = Thermal1DSolver::solve(cases[i]);
+                results[i] = Thermal1DSolver::solve(cases[i], false);
             }
         });
     }

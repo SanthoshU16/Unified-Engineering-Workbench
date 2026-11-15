@@ -11,7 +11,9 @@
 ## 1. Commit Topology & History
 
 ```text
-* b5fcd08 (HEAD -> main, origin/main) feat(deploy): add multi-stage Dockerfile and render.yaml for Render deployment
+* [pending] perf: optimize batch solver memory and tune default benchmark workload for cloud containers
+* 98bfe68 docs: replace ssh remote references with https across documentation
+* b5fcd08 feat(deploy): add multi-stage Dockerfile and render.yaml for Render deployment
 * 5132661 docs: synchronize git log and update verified git bundle
 * 0d0e13b docs: update AI log, walkthrough, and test counts
 * 6756554 feat: complete Unified Engineering Workbench R&D assessment (Tasks A-F)
