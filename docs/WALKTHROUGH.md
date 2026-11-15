@@ -2,7 +2,7 @@
 
 **PASS Science Works | R&D Internship Assessment 2026–2027**  
 **Document ID:** UEW-WALKTHROUGH-001  
-**Updated:** 2026-11-14
+**Updated:** 2026-11-15
 **Verification Environment:** macOS / Apple silicon. Windows packaging was not built or verified in this environment.  
 
 > This file documents the demonstration flow and captured command-line checks. It does not contain a live screen recording or screenshots; the interaction descriptions below are a walkthrough script, not recorded evidence.
@@ -21,7 +21,7 @@ $ ctest --test-dir build --output-on-failure
 100% tests passed, 0 tests failed
 
 $ ./build/backend/workbench_tests
-Test Summary: 12/12 tests passed
+Test Summary: 14/14 tests passed
 
 $ for file in frontend/src/*.js; do node --check "$file"; done
 # All frontend JavaScript syntax checks exited successfully.

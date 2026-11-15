@@ -78,3 +78,11 @@ On 2026-11-11, OpenAI Codex assisted with a later refinement pass requested by t
 - **Candidate Correction:**  
   The implementation uses **chunked batch dispatch**, assigning contiguous ranges to workers to keep queue synchronization bounded and preserve deterministic result ordering. The current benchmark report records measured efficiency for its stated machine, workload, and run rather than treating a timing as a portable performance guarantee.
 
+## 5. Submission Audit & Final UI Theme Pass (2026-11-15)
+
+- **Tool / model:** OpenAI Codex, GPT-6, used in the Codex desktop workspace.
+- **Representative candidate prompts:** The candidate asked for a distinctive, market-quality engineering-workbench UI palette and then asked Codex to compare the complete application with `Assignment_Only_Phase_version.pdf` for submission readiness.
+- **Model output and edits:** Codex changed the shared interface palette to midnight plum and ion orchid; aligned the thermal chart/canvas surfaces and hardware cards with that palette; retained the temperature heatmap colors; and corrected the misspelled top-level CMake minimum-version command after the source build failed to configure.
+- **Validation evidence:** On macOS / Apple silicon, the corrected source configured and built with CMake, CTest passed (14/14 backend checks), and `node --check` passed for the frontend JavaScript files. Windows packaging and clean-machine launch remain unverified.
+- **Remaining review:** The candidate should review the changed source and this log. No handwritten work, Windows runtime, or timestamped demonstration evidence was generated during this audit.
+
