@@ -1,8 +1,0 @@
-UEW local HTTP smoke log; run separately from the supplied screen recording.
-Target: macOS source build at 127.0.0.1:18080
-2026-11-15T16:35:21+05:30 GET / -> HTTP 200 HTML served
-2026-11-15T16:35:21+05:30 GET /styles.css -> HTTP 200 bytes=111547
-2026-11-15T16:35:21+05:30 GET /src/app.js -> HTTP 200 bytes=6881
-2026-11-15T16:35:21+05:30 GET /api/system/info -> HTTP 200 status=READY port=18080
-2026-11-15T16:35:21+05:30 POST /api/cad/stl/parse -> HTTP 200 valid=True triangles=72
-2026-11-15T16:35:21+05:30 POST /api/cad/ansys/parse -> HTTP 200 valid=True nodes=1440
