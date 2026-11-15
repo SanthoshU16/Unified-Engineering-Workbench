@@ -7,6 +7,12 @@
 ## Recent committed history at audit start
 
 ```text
+* [pending] docs(report): restructure REPORT.md to match official sample project report with embedded figures and tables
+8d85243 | 2026-11-15 | docs: explain Windows launcher options
+ed66e00 | 2026-11-15 | docs: add timestamped demo evidence
+e00244a | 2026-11-15 | docs: finalize candidate report and submission audit
+709a5bb | 2026-11-15 | docs: record final build and loopback verification
+f2a6534 | 2026-11-15 | chore: align assignment package and audit evidence
 26aa0b1 | 2026-11-15 | docs: add live Render deployment link and update handwritten evidence
 f6639ab | 2026-11-15 | results: update benchmark CSV and speedup SVG plot to match live 2000-case/N=100 run data
 a7a5fde | 2026-11-15 | docs(screenshots): add 8 live application screenshots covering all 4 workbench views
