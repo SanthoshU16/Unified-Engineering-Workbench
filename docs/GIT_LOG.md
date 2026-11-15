@@ -11,7 +11,8 @@
 ## 1. Commit Topology & History
 
 ```text
-* [pending] feat(ui): add Reset buttons for Performance Lab and Thermal FEA; improve empty-state chart UX
+* [pending] docs(screenshots): add 8 live application screenshots covering all 4 workbench views
+* 7514553 feat(ui): add Reset buttons for Performance Lab and Thermal FEA; improve empty-state chart UX
 * cbb7db3 perf: optimize batch solver memory and tune default benchmark workload for cloud containers
 * 98bfe68 docs: replace ssh remote references with https across documentation
 * b5fcd08 feat(deploy): add multi-stage Dockerfile and render.yaml for Render deployment
