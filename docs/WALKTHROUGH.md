@@ -27,6 +27,8 @@ All frontend JavaScript syntax checks exited successfully.
 $ ./build/src/backend/workbench_tests
 Test Summary: 14/14 tests passed (ALL TESTS PASSED 100%)
 
+Fresh out-of-tree CMake configure/build also completed successfully; CTest passed 1/1 target and the runner passed 14/14 checks.
+
 Local HTTP smoke check against the restructured source tree after the desktop listener was changed to loopback-only:
 Listener: `127.0.0.1:18080` (confirmed with `lsof`; no wildcard listener)
 GET /                         -> 200
