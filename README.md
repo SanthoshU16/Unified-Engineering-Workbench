@@ -29,7 +29,9 @@ cd Unified-Engineering-Workbench
 ```
 
 ### Windows 11 x64
-The submitted ZIP must contain root-level `Launch.exe` and `dist/windows-x64/workbench_server.exe`; double-click `Launch.exe` immediately after extraction. `Launch.bat` is a development fallback that can build the source tree when CMake and a compiler are installed.
+You can double-click `Launch.bat` on Windows. It starts `dist/windows-x64/workbench_server.exe` when that packaged server exists. If it does not, the batch file tries to build the source tree when CMake and a C++ compiler are installed; otherwise it reports an error and pauses. A command window may appear, and the source-build path requires developer tools.
+
+`Launch.bat` is a convenience fallback, not the required standalone launcher. The submitted ZIP must contain root-level `Launch.exe` and `dist/windows-x64/workbench_server.exe`. Double-clicking `Launch.exe` after extraction must open the workbench without a terminal, build tools, administrator rights, first-run build, or internet access.
 
 > **Packaging status:** The Windows x64 executables are not present in this checkout. The zero-install delivery requirement remains open until both files are built and checked on Windows 11 x64.
 
