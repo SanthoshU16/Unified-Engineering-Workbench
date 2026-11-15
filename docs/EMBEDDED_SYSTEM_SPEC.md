@@ -48,7 +48,7 @@ The following table details the power distribution, ground references, logic vol
 
 ## 4. Software Mock Implementation & Fault Recovery Plan
 
-### 4.1 Mock Adapter Architecture (`backend/include/workbench/embedded/`)
+### 4.1 Mock Adapter Architecture (`src/backend/include/workbench/embedded/`)
 - `IDeviceAdapter`: Abstract base class declaring lifecycle methods (`discover`, `get_capability_report`, `connect`, `disconnect`, `poll_telemetry`, `inject_failure`, `recover`).
 - `McuAdapter`: Simulates STM32F401 internal temperature sensor (42.5°C), 3.298V VDD rail, CPU utilization percentage, and packet sequence heartbeat.
 - `FpgaAdapter`: Simulates Xilinx Artix-7 on-die XADC temperature (53.2°C), 1.002V VCCINT, 1.805V VCCAUX, 3.310V VCCO, and PLL lock register.

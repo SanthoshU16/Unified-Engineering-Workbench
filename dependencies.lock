@@ -1,0 +1,29 @@
+{
+  "lockfile_version": 1,
+  "project": "Unified Engineering Workbench",
+  "runtime_dependencies": [],
+  "frontend_packages": [],
+  "requirements": {
+    "language_standard": "C++17",
+    "cmake_minimum": "3.20",
+    "windows_x64_build": "Visual Studio 2022 C++ x64 toolchain with Windows SDK",
+    "windows_runtime": "MSVC static runtime (/MT); no external VC++ redistributable package",
+    "posix_threads": "C++ platform thread library"
+  },
+  "verified_tool_versions": {
+    "platform": "macOS Apple silicon",
+    "compiler": "Apple Clang 21.0.0 (clang-2100.3.34.2)",
+    "cmake": "4.4.5",
+    "node": "22.19.0",
+    "reportlab": "4.5.1",
+    "windows_build": "not yet verified"
+  },
+  "packaging_tools": {
+    "python": "3.x with ReportLab 4.5.1",
+    "poppler": "pdfinfo",
+    "video_probe": "ffprobe (only when submitting demo.mp4)",
+    "git_history": "Git fast-export/fast-import and bundle commands",
+    "zip": "zip CLI",
+    "git": "Git CLI"
+  }
+}

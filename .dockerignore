@@ -1,4 +1,6 @@
 build/
+build-windows-x64/
+docs/*.bundle
 cmake-build-*/
 .git/
 .vscode/

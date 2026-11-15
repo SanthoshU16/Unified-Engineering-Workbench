@@ -2,7 +2,9 @@
 
 **PASS Science Works | R&D Internship Assessment 2026–2027**  
 **Candidate Evaluation Brief — 100 Points**  
-**Author:** Candidate ID: *R&D-2026-UEW*  
+**Author:** Candidate ID: *Pending candidate input*
+
+**Actual effort:** *Pending candidate input*
 **Date:** November 2026  
 **Target Platform:** Windows 11 x64 (Compatible with macOS and Linux x86_64/ARM64)  
 
@@ -15,7 +17,7 @@ The **Unified Engineering Workbench (UEW)** is a modular, high-reliability engin
 In strict adherence to the assessment brief:
 - All core application logic, numerical routines, file parsing, and multithreading are implemented in modern, clean **C++17** with zero external runtime dependencies.
 - A single coherent, responsive user interface provides interactive 3D WebGL visualizations, real-time charting, and hardware telemetry.
-- CMake source builds and the browser interface are implemented. The current source archive still needs a Windows x64 packaged runtime before it can meet the assignment's zero-install `Launch.exe` requirement.
+- CMake source builds and the browser interface are implemented. The Windows x64 packaged runtime is still missing, so the strict zero-install `Launch.exe` requirement is not yet met.
 
 ---
 
@@ -23,7 +25,7 @@ In strict adherence to the assessment brief:
 
 ### 1.1 Separation of Concerns
 The workbench enforces strict separation between computational core logic, network transport, and graphical presentation:
-1. **Core C++ Engine (`backend/include/workbench/` and `backend/src/`)**:
+1. **Core C++ Engine (`src/backend/include/workbench/` and `src/backend/src/`)**:
    - `fea::Thermal1DSolver`: Implements Galerkin linear finite-element formulation, element stiffness/load assembly, and $O(N)$ Thomas algorithm solving.
    - `fea::BatchThermalSolver`: Coordinates reproducible pseudo-random workload generation, serial execution, and thread-pool parallelization.
    - `cad::STLParser` & `cad::ANSYSParser`: High-speed parsers with complete validation, NaN/Inf rejection, and bounding box computation.
@@ -32,9 +34,9 @@ The workbench enforces strict separation between computational core logic, netwo
    - `ml::BackpropagationLab`: Exact analytical forward pass, chain-rule differentiation, and central finite-difference verification.
 2. **Zero-Dependency Transport Layer (`server::HttpServer`)**:
    - A lightweight, cross-platform socket server written in standard C++17.
-   - Binds to `127.0.0.1:8080` (or dynamically searches for the next available port), serving static web assets and REST JSON endpoints (`/api/...`).
+   - Desktop mode binds to `127.0.0.1:8080` (or searches the next available port). Cloud/container mode binds to all interfaces when deployment environment variables are present. It serves static web assets and REST JSON endpoints (`/api/...`).
    - Detaches client requests onto asynchronous threads to preserve UI responsiveness during heavy workloads.
-3. **Presentation Layer (`frontend/`)**:
+3. **Presentation Layer (`src/frontend/`)**:
    - Built with Vanilla ES6+ and HTML5 WebGL / 2D Canvas without heavy npm or external CDN dependencies, ensuring **100% offline functionality**.
 
 ### 1.2 Responsiveness & Safe Execution
@@ -106,7 +108,7 @@ $$E_{\text{theory}} = \frac{1}{8} \left| \frac{d^2T}{dx^2} \right| h^2 = \frac{q
 Batch solves are dispatched to a bounded worker pool (`multicore::ThreadPool`) instantiated with $P \in \{1, 2, 4\}$ worker threads. Independent cases are chunked into contiguous index ranges to eliminate queue lock contention while ensuring **strict deterministic input ordering** in the output result vector.
 
 ### 4.2 Benchmark Methodology & Measurements
-- **Workload**: 20,000 independent rods with varied positive thermal properties, mesh size $N = 200$, generated via fixed seed PRNG (`std::mt19937_64`, seed = 42).
+- **Workload**: 2,000 independent rods with varied positive thermal properties, mesh size $N = 100$, generated via fixed seed PRNG (`std::mt19937_64`, seed = 42). These values match the checked-in raw CSV and captured performance screenshots.
 - **Environment**: Apple M2, 8 physical / 8 logical CPU cores, 16 GiB installed RAM, Clang 21.0, `-O3`.
 - **Timing**: One untimed warm-up pass is executed for each measured worker count. Workload generation, warm-up, file loading, rendering, and compilation are excluded from reported compute time. Five measured repetitions per worker count are reported with the median. Each parallel timed call includes thread-pool creation/destruction and chunk scheduling, so its measurement represents the end-to-end parallel solve call.
 - **Launch-to-ready**: The UI reports backend startup from entry into `main()` until the HTTP server is listening, separately from solver timing. It excludes operating-system process loading and browser page loading; headless runs label this metric not applicable.
@@ -114,14 +116,13 @@ Batch solves are dispatched to a bounded worker pool (`multicore::ThreadPool`) i
 #### Experimental Benchmark Results:
 | Worker Count ($P$) | Rep 1 (ms) | Rep 2 (ms) | Rep 3 (ms) | Rep 4 (ms) | Rep 5 (ms) | Median Time ($T_p$) | Speedup ($T_1 / T_p$) | Efficiency ($S_p / P$) |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **1 Worker (Serial)** | 90.358 | 49.764 | 51.169 | 49.248 | 50.716 | **50.716 ms** | 1.00x | 100.0% |
-| **2 Workers** | 31.310 | 31.525 | 31.580 | 31.447 | 31.234 | **31.447 ms** | **1.61x** | 80.6% |
-| **4 Workers** | 18.951 | 18.971 | 18.978 | 18.939 | 19.002 | **18.971 ms** | **2.67x** | 66.8% |
+| **1 Worker (Serial)** | 9.73 | 5.57 | 5.22 | 4.70 | 4.39 | **5.22 ms** | 1.00x | 100.0% |
+| **2 Workers** | 2.73 | 2.71 | 2.52 | 2.39 | 2.36 | **2.52 ms** | **2.07x** | 103.6% |
+| **4 Workers** | 1.46 | 1.40 | 1.32 | 1.33 | 1.32 | **1.33 ms** | **3.92x** | 98.1% |
 
 - **Parallel Verification**:
   $$\max_{i, j} |T_{\text{serial}}(i, j) - T_{\text{parallel}}(i, j)| = 0.00000000^\circ\text{C} \le 10^{-8\ \circ}\text{C} \quad \text{[PASSED]}$$
-- **Analysis of Overhead & Limitations**:
-  Speedup scales from 1.61x on 2 workers to 2.67x on 4 workers in this run. Thread creation, task dispatch, synchronization, and result allocation are included in each parallel call; these costs can reduce or erase the benefit for smaller workloads. The elevated first serial sample also shows why five repetitions and a median are used. Results vary with CPU load, power state, compiler, and machine; no minimum speedup or high-end hardware is assumed. On a one-logical-CPU host, only the serial run is timed; the 2-worker path is still executed for correctness, and the UI/CSV state that speedup cannot be assessed.
+  The measured medians give 2.07x speedup on 2 workers and 3.92x on 4. The 2-worker efficiency is slightly above 100%; with this short workload, cache/scheduling and timing variation can produce that result, so it is not a claim of sustained superlinear scaling. Thread creation, task dispatch, synchronization, and result allocation are included in each parallel call; these costs can reduce or erase the benefit for smaller workloads. The elevated first serial sample shows why five repetitions and a median are used. Results vary with CPU load, power state, compiler, and machine; no minimum speedup or high-end hardware is assumed. On a one-logical-CPU host, only the serial run is timed; the 2-worker path is still executed for correctness, and the UI/CSV state that speedup cannot be assessed.
 
 ---
 

@@ -19,12 +19,12 @@ if exist "workbench_server.exe" (
     start "" "workbench_server.exe" --port 8080 --web-root "%SCRIPT_DIR%"
     goto launched
 )
-if exist "build\backend\Release\workbench_server.exe" (
-    start "" "build\backend\Release\workbench_server.exe" --port 8080 --web-root "%SCRIPT_DIR%"
+if exist "build\src\backend\Release\workbench_server.exe" (
+    start "" "build\src\backend\Release\workbench_server.exe" --port 8080 --web-root "%SCRIPT_DIR%"
     goto launched
 )
-if exist "build\backend\workbench_server.exe" (
-    start "" "build\backend\workbench_server.exe" --port 8080 --web-root "%SCRIPT_DIR%"
+if exist "build\src\backend\workbench_server.exe" (
+    start "" "build\src\backend\workbench_server.exe" --port 8080 --web-root "%SCRIPT_DIR%"
     goto launched
 )
 echo [Error] No packaged runtime or usable CMake source build is available.
@@ -37,10 +37,10 @@ cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 if errorlevel 1 goto build_error
 cmake --build build --config Release
 if errorlevel 1 goto build_error
-if exist "build\backend\Release\workbench_server.exe" (
-    start "" "build\backend\Release\workbench_server.exe" --port 8080 --web-root "%SCRIPT_DIR%"
-) else if exist "build\backend\workbench_server.exe" (
-    start "" "build\backend\workbench_server.exe" --port 8080 --web-root "%SCRIPT_DIR%"
+if exist "build\src\backend\Release\workbench_server.exe" (
+    start "" "build\src\backend\Release\workbench_server.exe" --port 8080 --web-root "%SCRIPT_DIR%"
+) else if exist "build\src\backend\workbench_server.exe" (
+    start "" "build\src\backend\workbench_server.exe" --port 8080 --web-root "%SCRIPT_DIR%"
 ) else (
     echo [Error] Could not launch workbench_server.exe.
     pause

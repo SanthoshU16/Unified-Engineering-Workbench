@@ -3,6 +3,8 @@
 Captured from the running Unified Engineering Workbench (local + Render deployment).  
 All views are from commit `7514553` on branch `main`.
 
+These are eight static screenshots. They have no embedded capture timestamps and are not, by themselves, the timestamped screenshot walkthrough or 3–5 minute video required by the assignment. See [`../WALKTHROUGH.md`](../WALKTHROUGH.md) for the current evidence status.
+
 | # | File | View | What it shows |
 |---|------|------|---------------|
 | 1 | `01_geometry_shaded_surface.jpg` | **Geometry — Shaded** | Heatsink STL (72 triangles, 100×100×50 mm) rendered in shaded-surface mode with validated part properties |

@@ -14,7 +14,8 @@ WORKDIR /app
 
 # Copy CMake build definition and backend source tree
 COPY CMakeLists.txt ./
-COPY backend/ ./backend/
+COPY src/backend/ ./src/backend/
+COPY tests/ ./tests/
 
 # Build optimized Release binary
 RUN cmake -S . -B build -DCMAKE_BUILD_TYPE=Release && \
@@ -33,11 +34,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /app
 
 # Copy compiled binary from builder stage
-COPY --from=builder /app/build/backend/workbench_server ./workbench_server
+COPY --from=builder /app/build/src/backend/workbench_server ./workbench_server
 
 # Copy static frontend assets, sample datasets, results, and documentation
-COPY frontend/ ./frontend/
-COPY samples/ ./samples/
+COPY src/frontend/ ./src/frontend/
+COPY data/ ./data/
 COPY results/ ./results/
 COPY docs/ ./docs/
 

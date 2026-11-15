@@ -20,7 +20,7 @@ The complete workbench is deployed and accessible live in the cloud:
 
 ## 1. Run the Workbench Locally
 
-The application has no third-party runtime libraries. A source build requires **CMake 3.20+** and a **C++17 compiler**.
+The application has no third-party runtime libraries. A source build requires **CMake 3.20+** and a **C++17 compiler**. Desktop runs listen on loopback; cloud/container runs bind to all interfaces when deployment environment variables are set. Tool versions and dependency details are recorded in [`dependencies.lock`](dependencies.lock) and [`docs/DEPENDENCIES.md`](docs/DEPENDENCIES.md).
 
 ### Clone Repository:
 ```bash
@@ -29,9 +29,19 @@ cd Unified-Engineering-Workbench
 ```
 
 ### Windows 11 x64
-The packaged application should include `Launch.exe` and `dist/windows-x64/workbench_server.exe`; double-click `Launch.exe` for the self-contained route. `Launch.bat` uses that package when present. In a source checkout it rebuilds the backend with CMake before launch, so recent source changes are not hidden behind an old executable.
+The submitted ZIP must contain root-level `Launch.exe` and `dist/windows-x64/workbench_server.exe`; double-click `Launch.exe` immediately after extraction. `Launch.bat` is a development fallback that can build the source tree when CMake and a compiler are installed.
 
-> **Packaging status:** This source checkout does not contain a Windows executable. Build the Windows x64 runtime before distributing a zero-install archive; the source fallback is not a substitute for that deliverable.
+> **Packaging status:** The Windows x64 executables are not present in this checkout. The zero-install delivery requirement remains open until both files are built and checked on Windows 11 x64.
+
+To build the Windows runtime on a Windows x64 development machine, install CMake 3.20+ and Visual Studio 2022 with the **Desktop development with C++** workload, then run:
+
+```powershell
+.\scripts\build_windows_runtime.ps1
+```
+
+This build-time toolchain is not required by the extracted application. After the runtime is checked, create the archive with `./scripts/package_submission.sh <CandidateID>` from a shell with `zip`, Git, Python 3 / ReportLab 4.5.1, and Poppler `pdfinfo` available.
+
+Before packaging, place the required 3–5 minute recording at `docs/demo/demo.mp4` or a timestamped screenshot walkthrough with logs at `docs/demo/screenshot_walkthrough.md`. Video preflight uses `ffprobe`; the package script checks the recording duration or walkthrough timestamps/logs, candidate ID and effort entry, Windows runtime, and six-page report.
 
 ### macOS / Linux
 Run the shell launcher:
@@ -42,9 +52,9 @@ When CMake is available, the script reconfigures and incrementally rebuilds the 
 
 ### Editor Run Configuration (VS Code / Antigravity IDE)
 1. Open the project folder.
-2. Choose the Windows x64 configuration on Windows or the macOS/Linux configuration on Unix-like systems.
-3. Press **F5**. The task configures CMake before building the backend.
-4. The Windows configuration uses the Microsoft C++ debugger. The macOS/Linux configuration uses CodeLLDB.
+2. For the packaged Windows app, select **Launch Packaged Workbench (Windows x64)** and press **F5**. The packaged runtime must already exist at `dist/windows-x64/`.
+3. For source debugging, select **Build and Launch Source (Windows x64)** or **Launch Unified Workbench (macOS / Linux)**; the task configures and builds CMake first.
+4. Windows debugging requires the Microsoft C/C++ extension. macOS/Linux debugging requires CodeLLDB. These editor extensions are not needed by the standalone launcher.
 
 ---
 
@@ -53,37 +63,41 @@ When CMake is available, the script reconfigures and incrementally rebuilds the 
 ```
 unified-engineering-workbench/
 ├── CMakeLists.txt                 # Root CMake configuration (C++17, CTest)
+├── dependencies.lock              # Runtime dependency and toolchain record
+├── Launch.exe                     # Built Windows launcher; generated before submission
 ├── Launch.bat                     # Windows one-click launcher
 ├── launch.sh                      # macOS/Linux one-click launcher
 ├── .vscode/                       # Editor run and debug configurations
 │   ├── launch.json                # F5 debug/run configuration
 │   └── tasks.json                 # Build & test task definitions
-├── backend/                       # Core C++17 application logic
-│   ├── include/workbench/
-│   │   ├── common/                # Types, Vec3, STL/ANSYS models, JSON serializer
-│   │   ├── fea/                   # 1D Thermal FEA solver & batch generator
-│   │   ├── cad/                   # STL & ANSYS CSV parsers
-│   │   ├── multicore/             # Bounded C++ thread pool
-│   │   ├── embedded/              # MCU, FPGA, and JTAG mock adapters
-│   │   ├── ml/                    # Analytical backpropagation & finite difference check
-│   │   └── server/                # Cross-platform socket HTTP/REST server
-│   ├── src/                       # C++ implementations
-│   └── tests/                     # Test suite (test_main.cpp with positive, negative, and numerical tests)
-├── frontend/                      # Presentation layer (100% offline, zero npm dependencies)
-│   ├── public/
-│   │   ├── index.html             # Single Page Application
-│   │   └── styles.css             # Midnight plum and ion-orchid engineering workstation theme
-│   └── src/
-│       ├── app.js                 # UI coordinator, navigation, and REST transport
-│       ├── renderer3d.js          # Zero-dependency WebGL 3D engine (STL + Point Cloud)
-│       ├── chart_engine.js        # Zero-dependency 2D Canvas charting engine
-│       ├── view_geometry.js       # CAD 3D STL viewer
-│       ├── view_thermal.js        # ANSYS point cloud & 1D FEA solver
-│       ├── view_performance.js    # Multicore benchmark runner & scaling charts
-│       └── view_hardware.js       # Embedded block diagram, tables, and device cards
-├── samples/                       # Sample datasets with provenance
+├── src/
+│   ├── backend/                   # Core C++17 application logic
+│   │   ├── include/workbench/
+│   │   │   ├── common/            # Types, Vec3, STL/ANSYS models, JSON serializer
+│   │   │   ├── fea/               # 1D Thermal FEA solver & batch generator
+│   │   │   ├── cad/               # STL & ANSYS CSV parsers
+│   │   │   ├── multicore/         # Bounded C++ thread pool
+│   │   │   ├── embedded/          # MCU, FPGA, and JTAG mock adapters
+│   │   │   ├── ml/                # Analytical backpropagation & finite difference check
+│   │   │   └── server/            # Cross-platform socket HTTP/REST server
+│   │   └── src/                   # C++ implementations
+│   └── frontend/                  # Presentation layer (100% offline, zero npm dependencies)
+│       ├── public/
+│       │   ├── index.html         # Single Page Application
+│       │   └── styles.css         # Midnight plum and ion-orchid engineering workstation theme
+│       └── src/
+│           ├── app.js             # UI coordinator, navigation, and REST transport
+│           ├── renderer3d.js      # Zero-dependency WebGL 3D engine (STL + Point Cloud)
+│           ├── chart_engine.js    # Zero-dependency 2D Canvas charting engine
+│           ├── view_geometry.js   # CAD 3D STL viewer
+│           ├── view_thermal.js    # ANSYS point cloud & 1D FEA solver
+│           ├── view_performance.js # Multicore benchmark runner & scaling charts
+│           └── view_hardware.js   # Embedded block diagram, tables, and device cards
+├── data/                          # Sample datasets with provenance
 │   ├── geometry/                  # STL samples (sample_heatsink.stl, validation fixtures)
 │   └── thermal/                   # Synthetic ANSYS-style nodal CSV (sample and parser error cases)
+├── tests/                         # Positive, negative, and numerical C++ tests
+├── dist/windows-x64/              # Built Windows server runtime; generated before submission
 ├── results/                       # Generated evidence, raw CSVs, and labelled plots
 │   ├── fea_convergence.csv        # FEA midpoint error data
 │   ├── benchmark_serial_parallel.csv # 1, 2, 4 worker scaling measurements
@@ -91,15 +105,24 @@ unified-engineering-workbench/
 │   └── plots/                     # High-resolution vector SVG plots
 ├── docs/                          # Comprehensive technical documentation
 │   ├── REPORT.md                  # Technical report and measured results
+│   ├── REPORT.pdf                 # Six-page submission report
+│   ├── SUBMISSION_AUDIT.md        # Requirement-by-requirement final audit
+│   ├── DEPENDENCIES.md            # Tool and dependency versions
 │   ├── APPENDIX_BACKPROP_DERIVATION.md # Backpropagation derivation
 │   ├── EMBEDDED_SYSTEM_SPEC.md    # Hardware interface & pin-voltage specification
 │   ├── WALKTHROUGH.md             # Walkthrough script and verification log
 │   ├── AI_USE_LOG.md              # AI assistance disclosure & challenge test
 │   └── OWNERSHIP.md               # Statement of original vs reused work
-└── scripts/
+├── scripts/
     ├── build.sh                   # Build & test automation script
+    ├── build_windows_runtime.ps1  # Windows x64 runtime build and hash report
+    ├── create_sanitized_bundle.py # Anonymized history bundle for the ZIP
+    ├── render_report.py           # Build the six-page PDF report (ReportLab)
     ├── run_benchmarks.sh          # Headless benchmark & results export
     └── package_submission.sh      # Submission zip archiver
+└── packaging/
+    └── windows/                   # Native Windows GUI launcher source
+        └── launcher.cpp
 ```
 
 ---
@@ -130,12 +153,12 @@ cmake --build build --config Release
 ctest --test-dir build --output-on-failure
 
 # Or execute test runner directly for detailed verbose output:
-./build/backend/workbench_tests
+./build/src/backend/workbench_tests
 ```
 
 ### Running Headless Benchmarks & Exporting Results:
 ```bash
-./build/backend/workbench_server --run-all-headless
+./build/src/backend/workbench_server --run-all-headless
 ```
 
 ---

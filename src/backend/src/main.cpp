@@ -73,10 +73,12 @@ int main(int argc, char* argv[]) {
     int port = 8080;
     bool headless = false;
     bool auto_open = true;
+    bool bind_all_interfaces = false;
 
     // Detect environment variables for cloud deployment (e.g. Render, Railway, Fly.io, Docker)
     const char* env_port = std::getenv("PORT");
     if (env_port) {
+        bind_all_interfaces = true;
         try {
             port = std::stoi(env_port);
             auto_open = false;
@@ -84,6 +86,7 @@ int main(int argc, char* argv[]) {
     }
     if (std::getenv("RENDER") || std::getenv("CONTAINER") || std::getenv("DOCKER")) {
         auto_open = false;
+        bind_all_interfaces = true;
     }
 
     bool run_benchmarks = false;
@@ -226,7 +229,7 @@ int main(int argc, char* argv[]) {
     }
 
     // Start UI HTTP Server
-    workbench::server::HttpServer server(port, web_root);
+    workbench::server::HttpServer server(port, web_root, bind_all_interfaces);
     if (!server.start()) {
         std::cerr << "Failed to start HTTP server on port " << port << "\n";
         return 1;

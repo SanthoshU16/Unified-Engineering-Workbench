@@ -34,10 +34,13 @@ add_executable(workbench_server
 )
 target_link_libraries(workbench_server PRIVATE workbench_core)
 target_compile_features(workbench_server PRIVATE cxx_std_17)
+if(MSVC)
+    target_link_libraries(workbench_server PRIVATE shell32)
+endif()
 
 # Test Suite Executable
 add_executable(workbench_tests
-    tests/test_main.cpp
+    ${CMAKE_SOURCE_DIR}/tests/test_main.cpp
 )
 target_link_libraries(workbench_tests PRIVATE workbench_core)
 target_compile_features(workbench_tests PRIVATE cxx_std_17)

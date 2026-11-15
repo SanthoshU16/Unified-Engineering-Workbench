@@ -10,7 +10,7 @@ cmake --build build --config Release
 
 echo "Running all headless computational tasks and exporting evidence to results/..."
 mkdir -p results
-./build/backend/workbench_server --run-all-headless
+./build/src/backend/workbench_server --run-all-headless
 
 echo "Results successfully generated in results/:"
 ls -lh results/

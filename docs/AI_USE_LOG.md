@@ -86,3 +86,12 @@ On 2026-11-11, OpenAI Codex assisted with a later refinement pass requested by t
 - **Validation evidence:** On macOS / Apple silicon, the corrected source configured and built with CMake, CTest passed (14/14 backend checks), and `node --check` passed for the frontend JavaScript files. Windows packaging and clean-machine launch remain unverified.
 - **Remaining review:** The candidate should review the changed source and this log. No handwritten work, Windows runtime, or timestamped demonstration evidence was generated during this audit.
 
+
+## 6. Final Assignment Audit & Folder Alignment (2026-11-15)
+
+- **Tool / model:** OpenAI Codex (GPT-6) in the Codex desktop workspace.
+- **Candidate prompt:** The candidate asked Codex to compare the project against the supplied `Assignment_Only_Phase_version.pdf`, check every requirement, and keep the project folders and docs current for submission.
+- **Relevant findings:** The assignment explicitly requires the `src/`, `data/`, and `tests/` folders; a Windows x64 `Launch.exe` and packaged server; a report of at most six pages; actual effort hours; and a 3–5 minute video or timestamped screenshot walkthrough with logs. The existing screenshots were static and the Windows runtime was absent. The report and walkthrough also contained stale benchmark figures.
+- **Edits prepared with AI assistance:** Aligned the repository layout to `src/`, `data/`, and `tests/`; updated CMake, launchers, Docker paths, sample paths, editor configuration, and packaging checks; added a native Windows launcher source and PowerShell runtime build helper; synchronized the benchmark report with the checked-in CSV; and added a six-page PDF report and renderer, dependency record, submission audit, and walkthrough notes.
+- **Validation evidence:** On macOS / Apple silicon, `./scripts/build.sh` completed and CTest passed 14/14 checks. Node.js 22.19.0 syntax checks passed for all frontend JavaScript files. The local HTTP listener was confirmed on `127.0.0.1:18080`; page, stylesheet, and module returned 200, the sample STL parsed as 72 triangles, and the synthetic CSV parsed as 1,440 nodes. Windows compilation/launch and timestamped demo evidence remain outstanding.
+- **Candidate review required:** Review these edits and run `scripts/build_windows_runtime.ps1` on Windows 11 x64 before packaging. No Windows runtime, capture timestamps, video, candidate ID, or actual effort hours were fabricated during this audit.

@@ -55,7 +55,7 @@ struct HttpResponse {
 
 class HttpServer {
 public:
-    HttpServer(int port = 8080, const std::string& web_root = ".");
+    HttpServer(int port = 8080, const std::string& web_root = ".", bool bind_all_interfaces = false);
     ~HttpServer();
 
     // Start listening on port (blocking or non-blocking)
@@ -73,6 +73,7 @@ private:
     int requested_port_{8080};
     int actual_port_{8080};
     std::string web_root_;
+    bool bind_all_interfaces_{false};
     std::atomic<bool> running_{false};
     std::atomic<double> launch_to_ready_ms_{0.0};
     std::thread server_thread_;

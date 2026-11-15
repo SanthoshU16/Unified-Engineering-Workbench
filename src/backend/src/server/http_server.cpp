@@ -86,8 +86,8 @@ std::string get_mime_type(const std::string& path) {
 
 } // anonymous namespace
 
-HttpServer::HttpServer(int port, const std::string& web_root)
-    : requested_port_(port), actual_port_(port), web_root_(web_root)
+HttpServer::HttpServer(int port, const std::string& web_root, bool bind_all_interfaces)
+    : requested_port_(port), actual_port_(port), web_root_(web_root), bind_all_interfaces_(bind_all_interfaces)
 {
 #if defined(_WIN32)
     WSADATA wsa;
@@ -120,7 +120,7 @@ bool HttpServer::start() {
         sockaddr_in addr;
         std::memset(&addr, 0, sizeof(addr));
         addr.sin_family = AF_INET;
-        addr.sin_addr.s_addr = htonl(INADDR_ANY); // Bind to 0.0.0.0 (supports localhost & Docker/cloud proxies)
+        addr.sin_addr.s_addr = htonl(bind_all_interfaces_ ? INADDR_ANY : INADDR_LOOPBACK);
         addr.sin_port = htons(port);
 
         if (bind(s, (struct sockaddr*)&addr, sizeof(addr)) == 0) {
@@ -316,7 +316,7 @@ HttpResponse HttpServer::route_request(const HttpRequest& req) {
 HttpResponse HttpServer::handle_static_file(const std::string& path) {
     std::string local_path = path;
     if (local_path.empty() || local_path == "/") {
-        local_path = "/frontend/public/index.html";
+        local_path = "/src/frontend/public/index.html";
     }
 
     // Prevent directory traversal attacks
@@ -328,14 +328,14 @@ HttpResponse HttpServer::handle_static_file(const std::string& path) {
     std::string file_path = web_root_ + local_path;
     std::ifstream f(file_path, std::ios::binary);
     if (!f.is_open()) {
-        // Try fallback directly in frontend/public
-        std::string fallback_path = web_root_ + "/frontend/public" + local_path;
+        // Resolve root-relative assets from the structured source tree.
+        std::string fallback_path = web_root_ + "/src/frontend/public" + local_path;
         f.open(fallback_path, std::ios::binary);
         if (f.is_open()) {
             file_path = fallback_path;
         } else {
-            // Try fallback in frontend/src
-            fallback_path = web_root_ + "/frontend" + local_path;
+            // ES modules are served from src/frontend/src.
+            fallback_path = web_root_ + "/src/frontend" + local_path;
             f.open(fallback_path, std::ios::binary);
             if (f.is_open()) {
                 file_path = fallback_path;

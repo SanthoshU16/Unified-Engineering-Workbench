@@ -1,5 +1,9 @@
 /build/
+/build-windows-x64/
 /cmake-build-*/
+/Launch.exe
+/dist/
+/docs/submission_history.bundle
 
 # Allow VS Code run/build configurations
 !.vscode/
@@ -14,3 +18,4 @@
 # Operating system files
 .DS_Store
 Thumbs.db
+**/__pycache__/
