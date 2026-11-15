@@ -117,8 +117,8 @@ unified-engineering-workbench/
 │   │       ├── 08_145410_hardware.png
 │   │       └── 09_145418_geometry_end.png
 │   ├── handwritten_evidence/
-│   │   ├── task_f_handwritten_notes_page_1.png
-│   │   └── task_f_handwritten_notes_page_2.png
+│   │   ├── backprop_page_1.png
+│   │   └── backprop_page_2.png
 │   ├── screenshots/
 │   │   ├── 01_geometry_shaded_surface.jpg
 │   │   ├── 02_geometry_wireframe.jpg

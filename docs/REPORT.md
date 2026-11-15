@@ -403,7 +403,7 @@ Executing 100 subsequent gradient-descent updates achieves strictly monotonic lo
 * **Final Loss (Step 100):** $\mathbf{1.70 \times 10^{-20}}$
 * **Final Prediction (Step 100):** $\mathbf{\hat{y} = 2.00000000}$
 
-*(Handwritten derivation evidence is preserved in `docs/handwritten_evidence/task_f_handwritten_notes_page_1.png` and `task_f_handwritten_notes_page_2.png`).*
+*(Handwritten derivation evidence is preserved in `docs/handwritten_evidence/backprop_page_1.png` and `backprop_page_2.png`).*
 
 ---
 

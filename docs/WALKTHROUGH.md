@@ -56,4 +56,4 @@ The screenshot index and its capture-commit note are in [`screenshots/README.md`
 
 ## Task F handwritten evidence
 
-The two photographed pages are [`task_f_handwritten_notes_page_1.png`](handwritten_evidence/task_f_handwritten_notes_page_1.png) and [`task_f_handwritten_notes_page_2.png`](handwritten_evidence/task_f_handwritten_notes_page_2.png). They contain the forward pass, chain-rule gradients, central finite-difference comparison, simultaneous update, and gradient-direction explanation. The C++ training output is in [`../results/backprop_training_loss.csv`](../results/backprop_training_loss.csv).
+The two photographed pages are [`backprop_page_1.png`](handwritten_evidence/backprop_page_1.png) and [`backprop_page_2.png`](handwritten_evidence/backprop_page_2.png). They contain the forward pass, chain-rule gradients, central finite-difference comparison, simultaneous update, and gradient-direction explanation. The C++ training output is in [`../results/backprop_training_loss.csv`](../results/backprop_training_loss.csv).
