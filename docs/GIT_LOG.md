@@ -11,7 +11,8 @@
 ## 1. Commit Topology & History
 
 ```text
-* [pending] results: update benchmark CSV and speedup SVG plot to match live 2000-case/N=100 run data
+* [pending] docs(readme): add live Render deployment link and badge
+* f6639ab results: update benchmark CSV and speedup SVG plot to match live 2000-case/N=100 run data
 * a7a5fde docs(screenshots): add 8 live application screenshots covering all 4 workbench views
 * 7514553 feat(ui): add Reset buttons for Performance Lab and Thermal FEA; improve empty-state chart UX
 * cbb7db3 perf: optimize batch solver memory and tune default benchmark workload for cloud containers
@@ -47,7 +48,7 @@
   - **Task C (Thermal FEA Solver)**: `backend/include/workbench/fea/thermal_1d.hpp`, `backend/src/fea/thermal_1d.cpp`.
   - **Task D (Multicore Engine)**: `backend/include/workbench/multicore/`, `backend/src/fea/thermal_batch.cpp`.
   - **Task E (Embedded Workbench)**: `backend/include/workbench/embedded/`, `backend/src/embedded/device_adapter.cpp`, `docs/EMBEDDED_SYSTEM_SPEC.md`.
-  - **Task F (Backpropagation Lab)**: `backend/include/workbench/ml/backprop.hpp`, `backend/src/ml/backprop.cpp`, `docs/APPENDIX_BACKPROP_DERIVATION.md`, SVG handwritten sheets.
+  - **Task F (Backpropagation Lab)**: `backend/include/workbench/ml/backprop.hpp`, `backend/src/ml/backprop.cpp`, `docs/APPENDIX_BACKPROP_DERIVATION.md`, and the two handwritten evidence images in `docs/handwritten_evidence/`.
   - **Frontend UI & Presentation**: `frontend/public/` (SPA HTML/CSS), `frontend/src/` (WebGL 3D engine, 2D chart engine, modular views).
   - **Test Suite & Verification Evidence**: `backend/tests/test_main.cpp` (14 unit tests), `results/` CSVs, and vector SVG plots.
 

@@ -92,5 +92,6 @@ $ for file in frontend/src/*.js; do node --check "$file"; done
 ### Task F: Backpropagation evidence (separate from the app)
 - Task F is implemented and verified in the C++ backend; it is not an application view.
 - The report and `results/` contain the numerical results, loss curve, and training CSV.
-- Submit the required handwritten forward pass, chain-rule derivatives, simultaneous update, and gradient-direction explanation as a legible scan or photo of at most two pages. The digital derivation in `docs/` is a reference and does not replace the handwritten evidence.
+- The candidate's two handwritten pages are stored in `docs/handwritten_evidence/` as `task_f_handwritten_notes_page_1.png` and `task_f_handwritten_notes_page_2.png`.
+- Include these page images in the submitted archive. The digital derivation in `docs/` is a reference and does not replace the handwritten evidence.
 

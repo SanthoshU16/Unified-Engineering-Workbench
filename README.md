@@ -4,13 +4,21 @@
 [![CMake](https://img.shields.io/badge/Build-CMake%203.20%2B-brightgreen.svg)](https://cmake.org/)
 [![Platform](https://img.shields.io/badge/Platform-Windows%2011%20x64%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)]()
 [![Tests](https://img.shields.io/badge/CTest-14%2F14%20Passed%20(100%25)-success.svg)]()
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Render-46E3B7?logo=render&logoColor=white)](https://unified-engineering-workbench.onrender.com)
 
 > **PASS Science Works | R&D Internship Assessment 2026–2027**  
 > Comprehensive, reliable engineering workbench combining CAD geometry processing, numerical thermal finite-element analysis (FEA), multicore parallel execution, embedded hardware workbench integration, and analytical backpropagation.
 
 ---
 
-## 1. Run the Workbench
+## 🚀 Live Application
+
+The complete workbench is deployed and accessible live in the cloud:  
+👉 **[https://unified-engineering-workbench.onrender.com](https://unified-engineering-workbench.onrender.com)**
+
+---
+
+## 1. Run the Workbench Locally
 
 The application has no third-party runtime libraries. A source build requires **CMake 3.20+** and a **C++17 compiler**.
 
