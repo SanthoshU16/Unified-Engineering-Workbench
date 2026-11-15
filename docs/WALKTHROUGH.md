@@ -10,6 +10,8 @@ Eight static screenshots showing the four workbench views are stored in [`screen
 
 There is no 3–5 minute video or timestamped screenshot sequence in the current folder. The screenshots are not time-stamped, and this text is a written guide rather than a recording log. The assignment's demonstration-evidence requirement is therefore still open. Do not present the screenshots as timestamped evidence.
 
+Use [`demo/README.md`](demo/README.md) for the Windows capture sequence and save final evidence in `docs/demo/` before packaging.
+
 ## Build and source verification
 
 Verification environment: macOS on Apple silicon, Apple Clang 21.0, CMake 4.4.5, and Node.js 22.19.0. Windows packaging and clean-machine launch have not been verified.

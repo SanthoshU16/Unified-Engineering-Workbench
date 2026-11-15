@@ -10,8 +10,9 @@ if [ -z "${1:-}" ]; then
 fi
 
 CANDIDATE_ID="$1"
-if [[ ! "$CANDIDATE_ID" =~ ^[A-Za-z0-9._&-]+$ ]]; then
-    echo "CandidateID may contain only letters, numbers, dots, underscores, ampersands, and hyphens."
+candidate_id_pattern='^[A-Za-z0-9 ._&-]+$'
+if [[ ! "$CANDIDATE_ID" =~ $candidate_id_pattern ]]; then
+    echo "CandidateID may contain only letters, numbers, spaces, dots, underscores, ampersands, and hyphens."
     exit 2
 fi
 ARCHIVE_NAME="${CANDIDATE_ID}_Workbench.zip"
@@ -32,8 +33,8 @@ else
     exit 1
 fi
 
-if grep -Eiq 'Candidate ID:.*pending|Actual effort:.*pending' docs/REPORT.md; then
-    echo "[Submission blocked] Fill the candidate ID and actual effort in docs/REPORT.md before packaging."
+if grep -Eiq 'Candidate ID:.*pending' docs/REPORT.md; then
+    echo "[Submission blocked] Fill the candidate ID in docs/REPORT.md before packaging."
     exit 1
 fi
 
@@ -42,7 +43,6 @@ if [ "$REPORT_CANDIDATE" != "$CANDIDATE_ID" ]; then
     echo "[Submission blocked] Archive CandidateID '$CANDIDATE_ID' does not match docs/REPORT.md Candidate ID '$REPORT_CANDIDATE'."
     exit 1
 fi
-
 if [ -f "docs/demo/demo.mp4" ]; then
     if [ ! -s "docs/demo/demo.mp4" ] || ! command -v ffprobe >/dev/null 2>&1; then
         echo "[Submission blocked] Install ffprobe and provide a readable 3-5 minute video at docs/demo/demo.mp4, or provide the timestamped screenshot walkthrough."

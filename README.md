@@ -39,9 +39,9 @@ To build the Windows runtime on a Windows x64 development machine, install CMake
 .\scripts\build_windows_runtime.ps1
 ```
 
-This build-time toolchain is not required by the extracted application. After the runtime is checked, create the archive with `./scripts/package_submission.sh <CandidateID>` from a shell with `zip`, Git, Python 3 / ReportLab 4.5.1, and Poppler `pdfinfo` available.
+This build-time toolchain is not required by the extracted application. After the runtime is checked, create the archive with `./scripts/package_submission.sh "<CandidateID>"` from a shell with `zip`, Git, Python 3 / ReportLab 4.5.1, and Poppler `pdfinfo` available.
 
-Before packaging, place the required 3–5 minute recording at `docs/demo/demo.mp4` or a timestamped screenshot walkthrough with logs at `docs/demo/screenshot_walkthrough.md`. Video preflight uses `ffprobe`; the package script checks the recording duration or walkthrough timestamps/logs, candidate ID and effort entry, Windows runtime, and six-page report.
+Before packaging, place the required 3–5 minute recording at `docs/demo/demo.mp4` or a timestamped screenshot walkthrough with logs at `docs/demo/screenshot_walkthrough.md`. Video preflight uses `ffprobe`; the package script checks the recording duration or walkthrough timestamps/logs, Candidate ID, Windows runtime, and six-page report.
 
 ### macOS / Linux
 Run the shell launcher:

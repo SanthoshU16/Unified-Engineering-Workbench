@@ -2,9 +2,7 @@
 
 **PASS Science Works | R&D Internship Assessment 2026–2027**  
 **Candidate Evaluation Brief — 100 Points**  
-**Author:** Candidate ID: *Pending candidate input*
-
-**Actual effort:** *Pending candidate input*
+**Author:** Candidate ID: *SanthoshU*
 **Date:** November 2026  
 **Target Platform:** Windows 11 x64 (Compatible with macOS and Linux x86_64/ARM64)  
 

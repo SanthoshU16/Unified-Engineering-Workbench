@@ -21,11 +21,15 @@ The checked-in `docs/workbench_repo.bundle` is historical evidence. It contains 
 
 ## Final audit changes
 
-This audit aligned the project to `src/`, `data/`, and `tests/`; updated CMake, local launchers, Docker paths, sample data routes, editor configuration, and package contents; made desktop HTTP binding loopback-only; added a native Windows launcher source and runtime build helper; synchronized the report with the checked-in benchmark CSV; and added a six-page report PDF, dependency record, and requirement audit. These changes are prepared in the working tree and have not been pushed.
+This audit aligned the project to `src/`, `data/`, and `tests/`; updated CMake, local launchers, Docker paths, sample data routes, editor configuration, and package contents; made desktop HTTP binding loopback-only; added a native Windows launcher source and runtime build helper; synchronized the report with the checked-in benchmark CSV; and added a six-page report PDF, dependency record, and requirement audit.
+
+## Final-check update (2026-11-15)
+
+Candidate ID `SanthoshU` is confirmed and recorded in the report. At the candidate's direction, the requested self-report field is omitted; the submission audit records that rubric item as unmet. The six-page report was regenerated and visually checked after this metadata update. The Windows runtime and required demonstration evidence are still absent, so the submission archive has not been produced.
 
 ## Repository and package state
 
-- Local `HEAD` and the stored `origin/main` tracking ref matched at `26aa0b1` when checked.
+- At final-check start, local `main` was ahead of the stored `origin/main` tracking ref by two commits (`f2a6534`, `709a5bb`). This final-check update is recorded in the following commit; no push was made.
 - A live remote check was unavailable during the audit because the host could not resolve GitHub.
 - The sanitized archive bundle is generated from committed `main` at packaging time. Final audit changes must be committed first so the archive history reflects them. The packaging helper anonymizes author/committer email metadata and email addresses in historical text blobs; the older tracked bundle is excluded from the ZIP because it predates this redaction.
-- No submission ZIP was created. `scripts/package_submission.sh` now stops until the candidate ID and both Windows runtime files are present.
+- No submission ZIP was created. `scripts/package_submission.sh` stops until the Windows runtime and required demonstration evidence are present; the Candidate ID is now confirmed.
