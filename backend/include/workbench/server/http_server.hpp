@@ -67,6 +67,7 @@ public:
 
     int get_actual_port() const { return actual_port_; }
     std::string get_url() const { return "http://127.0.0.1:" + std::to_string(actual_port_); }
+    bool is_running() const { return running_.load(); }
 
 private:
     int requested_port_{8080};

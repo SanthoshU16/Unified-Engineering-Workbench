@@ -11,6 +11,8 @@
 #include <chrono>
 #include <thread>
 #include <cstdlib>
+#include <csignal>
+#include <atomic>
 
 #if defined(_WIN32)
 #include <windows.h>
@@ -54,15 +56,36 @@ void save_file(const std::string& path, const std::string& content) {
     }
 }
 
+static std::atomic<bool> g_terminated{false};
+extern "C" void handle_sigterm(int) {
+    g_terminated = true;
+}
+
 } // anonymous namespace
 
 int main(int argc, char* argv[]) {
+    std::signal(SIGINT, handle_sigterm);
+    std::signal(SIGTERM, handle_sigterm);
+
     const auto t_start = std::chrono::steady_clock::now();
     print_banner();
 
     int port = 8080;
     bool headless = false;
     bool auto_open = true;
+
+    // Detect environment variables for cloud deployment (e.g. Render, Railway, Fly.io, Docker)
+    const char* env_port = std::getenv("PORT");
+    if (env_port) {
+        try {
+            port = std::stoi(env_port);
+            auto_open = false;
+        } catch (...) {}
+    }
+    if (std::getenv("RENDER") || std::getenv("CONTAINER") || std::getenv("DOCKER")) {
+        auto_open = false;
+    }
+
     bool run_benchmarks = false;
     bool run_fea = false;
     bool run_backprop = false;
@@ -220,11 +243,19 @@ int main(int argc, char* argv[]) {
         open_browser(server.get_url());
     }
 
-    // Keep running until user enters 'q' or terminates
+    // Keep running until user enters 'q' or process receives termination signal
     std::string line;
-    while (std::getline(std::cin, line)) {
+    while (!g_terminated.load() && std::getline(std::cin, line)) {
         if (line == "q" || line == "quit" || line == "exit") {
             break;
+        }
+    }
+
+    // In non-interactive environments (e.g. Docker, Render web service), std::cin hits EOF immediately
+    if (std::cin.eof() && !g_terminated.load()) {
+        std::cout << "[Workbench] Non-interactive environment detected. Keeping server daemon active...\n";
+        while (!g_terminated.load() && server.is_running()) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(250));
         }
     }
 
